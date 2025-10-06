@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+import 'package:spotify/core/constants/color_constants.dart';
+import 'package:spotify/view/phone_signup_screen/phone_signup.dart';
+
+
+class EmailSignup extends StatefulWidget {
+  const EmailSignup({super.key});
+
+  @override
+  State<EmailSignup> createState() => _EmailSignupState();
+}
+
+class _EmailSignupState extends State<EmailSignup> {
+  TextEditingController emailctrl = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
+  FocusNode newFocusnode = FocusNode();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Create account",
+          style: TextStyle(color: ColorConstants.white),
+        ),
+        backgroundColor: ColorConstants.black,
+      ),
+      backgroundColor: ColorConstants.black,
+      body: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "What's your email\naddress?",
+              style: TextStyle(
+                color: ColorConstants.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            SizedBox(height: 10),
+            Form(
+              key: _formkey,
+              child: TextFormField(
+                controller: emailctrl,
+                focusNode: newFocusnode,
+                style: TextStyle(color: ColorConstants.white),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: ColorConstants.signUpTextfield,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: ColorConstants.white),
+                  ),
+                  hoverColor: ColorConstants.white,
+                ),
+                onTapOutside: (event) {
+                  newFocusnode.unfocus();
+                },
+                validator: (value) {
+                  if (value != null && value.contains("@")) {
+                    return null;
+                  } else {
+                    return "Enter a valid email";
+                  }
+                },
+              ),
+            ),
+            SizedBox(height: 40),
+            Center(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(ColorConstants.grey),
+                ),
+                onPressed: () {
+                  if (_formkey.currentState!.validate()) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PhoneSignup()),
+                    );
+                  }
+                },
+                child: Text(
+                  "Next",
+                  style: TextStyle(color: ColorConstants.black),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

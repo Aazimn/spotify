@@ -23,4 +23,23 @@ class ImageConstants {
   static const String travelSongs = "assets/images/travel.jpg";
   static const String hindiSongs = "assets/images/hindisongs.jpg";
   static const String topHitSongs = "assets/images/tophit.jpg";
+  static const String rajatTopMixes = "assets/images/rajattopmixes.jpg";
+  static const String dabzeeTopMixes = "assets/images/dabzee.jpg";
+  static const String govindhTopMixes = "assets/images/govindhtopmixes.jpg";
+  static const String ravalTopMixes = "assets/images/ravaltopmixes.jpg";
+  static const String raataan = "assets/images/raataan.jpg";
+  static const String haule = "assets/images/haulehaule.jpg";
+  static const String chandsifarish = "assets/images/chandsaifarish.jpg";
+  static const String perillarajyath = "assets/images/perillarajyath.jpg";
+  static const String charliesong = "assets/images/charlie.jpg";
+  static const String hridhayavum = "assets/images/hridhayavum.jpg";
+  static const String kalyanaRaman = "assets/images/kalyanaraman.jpg";
+  static const String tejaBhai = "assets/images/tejabhai.jpg";
+  static const String vishwaroopam = "assets/images/vishwaroopam.jpg";
+  static const String ambili = "assets/images/ambili.jpg";
+  static const String spanishMasala = "assets/images/spanishmasala.jpg";
+  static const String premiumBG = "assets/images/premiumbg.png";
+  static const String musicNote = "assets/images/music.png";
+  static const String peoples = "assets/images/3people.jpg";
+  static const String blend = "assets/images/blend.png";
 }

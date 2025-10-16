@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/dashbord/dashboard.dart';
 import 'package:spotify/view/home_screen/home_screen.dart';
 
 class ChoosePodcast extends StatefulWidget {
@@ -49,7 +50,10 @@ class _ChoosePodcastState extends State<ChoosePodcast> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.black,
-      appBar: AppBar(backgroundColor: ColorConstants.black),
+      appBar: AppBar(
+        backgroundColor: ColorConstants.black,
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         children: [
           Padding(
@@ -190,7 +194,7 @@ class _ChoosePodcastState extends State<ChoosePodcast> {
               ? () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => Dashboard()),
                   );
                 }
               : null,

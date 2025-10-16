@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/gender_signup_screen/gender_signup.dart';
 
@@ -121,8 +122,11 @@ class _PasswordState extends State<Password> {
                       ColorConstants.grey,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formkey.currentState!.validate()) {
+                      final Password = passctrl.text.trim();
+                      final pref = await SharedPreferences.getInstance();
+                      pref.setString("password", Password);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => GenderSignup()),

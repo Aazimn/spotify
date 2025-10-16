@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/phone_signup_screen/phone_signup.dart';
-
 
 class EmailSignup extends StatefulWidget {
   const EmailSignup({super.key});
@@ -18,9 +18,15 @@ class _EmailSignupState extends State<EmailSignup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Create account",
-          style: TextStyle(color: ColorConstants.white),
+        iconTheme: IconThemeData(color: ColorConstants.white),
+        title: Row(
+          children: [
+            SizedBox(width: 50),
+            Text(
+              "Create account",
+              style: TextStyle(color: ColorConstants.white),
+            ),
+          ],
         ),
         backgroundColor: ColorConstants.black,
       ),
@@ -73,11 +79,16 @@ class _EmailSignupState extends State<EmailSignup> {
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(ColorConstants.grey),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formkey.currentState!.validate()) {
+                    final email = emailctrl.text.trim();
+                    final pref = await SharedPreferences.getInstance();
+                    pref.setString("email", email);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PhoneSignup()),
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => PhoneSignup(),
+                      ),
                     );
                   }
                 },

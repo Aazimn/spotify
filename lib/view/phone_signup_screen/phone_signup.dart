@@ -18,12 +18,7 @@ class _PhoneSignupState extends State<PhoneSignup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            "Create account",
-            style: TextStyle(color: ColorConstants.white),
-          ),
-        ),
+        iconTheme: IconThemeData(color: ColorConstants.white),
         backgroundColor: ColorConstants.black,
       ),
       backgroundColor: ColorConstants.black,
@@ -47,47 +42,53 @@ class _PhoneSignupState extends State<PhoneSignup> {
               Container(
                 height: 60,
                 color: const Color.fromARGB(255, 67, 67, 67),
-                child: DropdownButtonFormField(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  focusColor: Colors.red,
-                  isExpanded: true,
-                  iconSize: 50,
-                  style: TextStyle(color: ColorConstants.black),
-                  value: country,
-                  items: [
-                    DropdownMenuItem(value: "India", child: Text("India")),
-                    DropdownMenuItem(value: "Usa", child: Text("Usa")),
-                    DropdownMenuItem(value: "Uk", child: Text("Uk")),
-                    DropdownMenuItem(value: "Canada", child: Text("Canada")),
-                  ],
-                  selectedItemBuilder: (context) {
-                    return [
-                      Text(
-                        "India",
-                        style: TextStyle(color: ColorConstants.white),
-                      ),
-                      Text(
-                        "Usa",
-                        style: TextStyle(color: ColorConstants.white),
-                      ),
-                      Text("Uk", style: TextStyle(color: ColorConstants.white)),
-                      Text(
-                        "Canada",
-                        style: TextStyle(color: ColorConstants.white),
-                      ),
-                    ];
-                  },
-                  onChanged: (value) {
-                    country = value;
-                    setState(() {});
-                  },
-                  validator: (value) {
-                    if (value != null) {
-                      return null;
-                    } else {
-                      return "Select a Country";
-                    }
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 0),
+                  child: DropdownButtonFormField(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    focusColor: Colors.red,
+                    isExpanded: true,
+                    iconSize: 50,
+                    style: TextStyle(color: ColorConstants.black),
+                    value: country,
+                    items: [
+                      DropdownMenuItem(value: "India", child: Text("India")),
+                      DropdownMenuItem(value: "Usa", child: Text("Usa")),
+                      DropdownMenuItem(value: "Uk", child: Text("Uk")),
+                      DropdownMenuItem(value: "Canada", child: Text("Canada")),
+                    ],
+                    selectedItemBuilder: (context) {
+                      return [
+                        Text(
+                          "India",
+                          style: TextStyle(color: ColorConstants.white),
+                        ),
+                        Text(
+                          "Usa",
+                          style: TextStyle(color: ColorConstants.white),
+                        ),
+                        Text(
+                          "Uk",
+                          style: TextStyle(color: ColorConstants.white),
+                        ),
+                        Text(
+                          "Canada",
+                          style: TextStyle(color: ColorConstants.white),
+                        ),
+                      ];
+                    },
+                    onChanged: (value) {
+                      country = value;
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value != null) {
+                        return null;
+                      } else {
+                        return "Select a Country";
+                      }
+                    },
+                  ),
                 ),
               ),
               Row(

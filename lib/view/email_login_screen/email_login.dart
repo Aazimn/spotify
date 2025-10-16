@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
+import 'package:spotify/view/dashbord/dashboard.dart';
 import 'package:spotify/view/home_screen/home_screen.dart';
+import 'package:spotify/view/password_signup_screen/password_signup.dart';
 
 class EmailLogin extends StatefulWidget {
   const EmailLogin({super.key});
@@ -119,11 +122,17 @@ class _EmailLoginState extends State<EmailLogin> {
                       ColorConstants.grey,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formkey.currentState!.validate()) {
+                      final email = emailctrl.text.trim();
+                      final Password = passctrl.text.trim();
+                      final pref = await SharedPreferences.getInstance();
+                      pref.setString("email", email);
+                      pref.setString("password", Password);
+
                       Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => Dashboard()),
                     );
                     }
                   },

@@ -49,11 +49,14 @@ class _ChooseArtistState extends State<ChooseArtist> {
     return Scaffold(
       backgroundColor: ColorConstants.black,
       appBar: AppBar(
-        title: Text(
-          "Choose 3 or more artists you like.",
-          style: TextStyle(
-            color: ColorConstants.white,
-            fontWeight: FontWeight.bold,
+        automaticallyImplyLeading: false,
+        title: Center(
+          child: Text(
+            "Choose 3 or more artists you like.",
+            style: TextStyle(
+              color: ColorConstants.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         backgroundColor: ColorConstants.black,

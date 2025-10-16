@@ -20,4 +20,7 @@ class ImageConstants {
   static const String gymMotivation = "assets/images/gym.jpg";
   static const String tamilSongs = "assets/images/tamilsongs.jpg";
   static const String malayalamSongs = "assets/images/malayalamsongs.jpg";
+  static const String travelSongs = "assets/images/travel.jpg";
+  static const String hindiSongs = "assets/images/hindisongs.jpg";
+  static const String topHitSongs = "assets/images/tophit.jpg";
 }

@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(width: 10),
                     recentPlaylist(
-                      img: AssetImage(ImageConstants.ariana),
+                      img: AssetImage(ImageConstants.travelSongs),
                       text: 'Travel Songs',
                       height: 60,
                       width: 60,
@@ -156,20 +156,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     recentPlaylist(
-                      img: AssetImage(ImageConstants.ariana),
+                      img: AssetImage(ImageConstants.hindiSongs),
                       text: 'Hindi Songs',
                       height: 60,
                       width: 60,
                     ),
                     SizedBox(width: 10),
                     recentPlaylist(
-                      img: AssetImage(ImageConstants.ariana),
+                      img: AssetImage(ImageConstants.topHitSongs),
                       text: 'Top Hit Songs',
                       height: 60,
                       width: 60,
                     ),
                   ],
                 ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Albums featuring songs you like",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 23,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                Column(),
               ],
             ),
           ],
@@ -186,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
         color: const Color.fromARGB(255, 80, 77, 77),
       ),
       width: 170,
@@ -195,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(10),
+            borderRadius: BorderRadiusGeometry.circular(5),
             child: Image(
               height: height,
               width: width,

@@ -12,6 +12,21 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  String name = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
+
+  Future<void> getdata() async {
+    final pref = await SharedPreferences.getInstance();
+    name = await pref.getString("Name") ?? "Not available";
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +72,9 @@ class _SettingsState extends State<Settings> {
                   const SizedBox(width: 15),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        "Aazim",
+                        name,
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -70,16 +85,6 @@ class _SettingsState extends State<Settings> {
                       Text(
                         "View profile",
                         style: TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 180),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        color: ColorConstants.white,
-                        size: 30,
                       ),
                     ],
                   ),
@@ -122,12 +127,22 @@ class _SettingsState extends State<Settings> {
                       ),
                     );
                   },
-                  child: Text(
-                    "Log out",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: ColorConstants.black,
-                      fontWeight: FontWeight.w700,
+                  child: InkWell(
+                    onTap: () async {
+                      final pref = await SharedPreferences.getInstance();
+                      pref.clear();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => StartPage()),
+                      );
+                    },
+                    child: Text(
+                      "Log out",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: ColorConstants.black,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),

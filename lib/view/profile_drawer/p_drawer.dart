@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/profile_screen/profile_screen.dart';
 import 'package:spotify/view/recent_screen/recent_screen.dart';
@@ -6,9 +7,28 @@ import 'package:spotify/view/settings_screen/settings.dart';
 import 'package:spotify/view/sign_up_screen/sign_up.dart';
 import 'package:spotify/view/whats_new_screen/whats_new.dart';
 
-class ProfilrDrawer extends StatelessWidget {
+class ProfilrDrawer extends StatefulWidget {
   final GlobalKey<ScaffoldState> drawerkey;
   const ProfilrDrawer({super.key, required this.drawerkey});
+
+  @override
+  State<ProfilrDrawer> createState() => _ProfilrDrawerState();
+}
+
+class _ProfilrDrawerState extends State<ProfilrDrawer> {
+  String name = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
+
+  Future<void> getdata() async {
+    final pref = await SharedPreferences.getInstance();
+    name = await pref.getString("Name") ?? "Not available";
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +50,11 @@ class ProfilrDrawer extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 25,
                       backgroundColor: ColorConstants.pink,
                       child: Text(
-                        "A",
+                        name.isNotEmpty ? name[0].toUpperCase() : "A",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -45,9 +65,9 @@ class ProfilrDrawer extends StatelessWidget {
                     const SizedBox(width: 15),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
-                          "Aazim",
+                          name,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

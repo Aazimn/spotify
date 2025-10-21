@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
-
 import 'package:spotify/view/search_section/search_section.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -14,16 +13,55 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  ImagePicker imagePicker = ImagePicker();
-  File? _pickedimage;
+    String name = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
+
+  Future<void> getdata() async {
+    final pref = await SharedPreferences.getInstance();
+    name = await pref.getString("Name") ?? "Not available";
+    setState(() {});
+  }
+  final ImagePicker _imagePicker = ImagePicker();
+  File? _pickedImage;
+
   Future<void> pick() async {
-    var data = await imagePicker.pickImage(source: ImageSource.camera);
+    final data = await _imagePicker.pickImage(source: ImageSource.camera);
     if (data != null) {
       setState(() {
-        _pickedimage = File(data.path);
+        _pickedImage = File(data.path);
       });
     }
   }
+
+ 
+  final List<Map<String, dynamic>> startBrowsingItems = [
+    {"title": "Music", "color": ColorConstants.pink},
+    {"title": "Podcasts", "color": ColorConstants.darkgreen},
+    {"title": "Live Events", "color": ColorConstants.purple},
+    {"title": "Home of Pop", "color": ColorConstants.darkblue},
+  ];
+
+  final List<Map<String, dynamic>> browsingAllItems = [
+    {
+      "title": "Podcasts Charts",
+      "color": const Color.fromARGB(255, 98, 71, 51),
+    },
+    {
+      "title": "Business &\nTechnology",
+      "color": const Color.fromARGB(255, 103, 23, 62),
+    },
+    {"title": "Discover", "color": const Color.fromARGB(255, 36, 88, 46)},
+    {"title": "Radio", "color": const Color.fromARGB(255, 6, 39, 53)},
+    {"title": "Malayalam", "color": const Color.fromARGB(255, 111, 103, 198)},
+    {"title": "Hindi", "color": const Color.fromARGB(255, 162, 162, 48)},
+    {"title": "Punjabi", "color": const Color.fromARGB(255, 143, 81, 32)},
+    {"title": "Tamil", "color": const Color.fromARGB(255, 96, 59, 156)},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +71,19 @@ class _SearchScreenState extends State<SearchScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: ColorConstants.black,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            InkWell(
-              child: CircleAvatar(
-                backgroundColor: Colors.green,
-                child: Text(
-                  "B",
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: ColorConstants.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+            CircleAvatar(
+              backgroundColor: Colors.green,
+              child: Text(
+                name.isNotEmpty ? name[0].toUpperCase() : "A",
+                style: TextStyle(
+                  fontSize: 25,
+                  color: ColorConstants.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(
               "Search",
               style: TextStyle(
@@ -63,9 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: InkWell(
-              onTap: () {
-                pick();
-              },
+              onTap: pick,
               child: Icon(
                 Icons.camera_alt_outlined,
                 color: ColorConstants.white,
@@ -79,12 +112,15 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchSection()),
+                    MaterialPageRoute(
+                      builder: (context) => const SearchSection(),
+                    ),
                   );
                 },
                 child: Container(
@@ -93,129 +129,73 @@ class _SearchScreenState extends State<SearchScreen> {
                     borderRadius: BorderRadius.circular(5),
                     color: ColorConstants.white,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Row(
-                      children: [
-                        Icon(Icons.search),
-                        SizedBox(width: 10),
-                        Text(
-                          "What do you want to listen?",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.search),
+                      SizedBox(width: 10),
+                      Text(
+                        "What do you want to listen?",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
                   ),
                 ),
               ),
 
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Start browsing",
-                    style: TextStyle(
-                      color: ColorConstants.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 20),
+
+              Text(
+                "Start browsing",
+                style: TextStyle(
+                  color: ColorConstants.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 15),
-              Row(
-                children: [
-                  _startbrowing("Music", ColorConstants.pink, 80),
-                  SizedBox(width: 20),
-                  _startbrowing("Podcasts", ColorConstants.darkgreen, 80),
-                ],
+              const SizedBox(height: 15),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: startBrowsingItems.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15,
+                  childAspectRatio: 2, 
+                ),
+                itemBuilder: (context, index) {
+                  final item = startBrowsingItems[index];
+                  return _buildBrowsingCard(item["title"], item["color"]);
+                },
               ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  _startbrowing("Live Events", ColorConstants.purple, 80),
-                  SizedBox(width: 20),
-                  _startbrowing("Home of Pop", ColorConstants.darkblue, 80),
-                ],
+
+              const SizedBox(height: 30),
+
+              
+              Text(
+                "Browsing all",
+                style: TextStyle(
+                  color: ColorConstants.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Browsing all",
-                    style: TextStyle(
-                      color: ColorConstants.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  _startbrowing(
-                    "Podcasts Charts",
-                    const Color.fromARGB(255, 98, 71, 51),
-                    120,
-                  ),
-                  SizedBox(width: 20),
-                  _startbrowing(
-                    "Business &\nTechnology",
-                    const Color.fromARGB(255, 103, 23, 62),
-                    120,
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  _startbrowing(
-                    "Discover",
-                    const Color.fromARGB(255, 36, 88, 46),
-                    120,
-                  ),
-                  SizedBox(width: 20),
-                  _startbrowing(
-                    "Radio",
-                    const Color.fromARGB(255, 6, 39, 53),
-                    120,
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  _startbrowing(
-                    "Malayalam",
-                    const Color.fromARGB(255, 111, 103, 198),
-                    120,
-                  ),
-                  SizedBox(width: 20),
-                  _startbrowing(
-                    "Hindi",
-                    const Color.fromARGB(255, 162, 162, 48),
-                    120,
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  _startbrowing(
-                    "punjabi",
-                    const Color.fromARGB(255, 143, 81, 32),
-                    120,
-                  ),
-                  SizedBox(width: 20),
-                  _startbrowing(
-                    "Tamil",
-                    const Color.fromARGB(255, 96, 59, 156),
-                    120,
-                  ),
-                ],
+              const SizedBox(height: 15),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: browsingAllItems.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15,
+                  childAspectRatio: 1.4, 
+                ),
+                itemBuilder: (context, index) {
+                  final item = browsingAllItems[index];
+                  return _buildBrowsingCard(item["title"], item["color"]);
+                },
               ),
             ],
           ),
@@ -224,29 +204,23 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Container _startbrowing(String text, Color bg, double height) {
+ 
+  Widget _buildBrowsingCard(String title, Color bgColor) {
     return Container(
-      height: height,
-      width: 175,
       decoration: BoxDecoration(
+        color: bgColor,
         borderRadius: BorderRadius.circular(10),
-        color: bg,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              text,
-              style: TextStyle(
-                color: ColorConstants.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+      padding: const EdgeInsets.all(10),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          title,
+          style: TextStyle(
+            color: ColorConstants.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

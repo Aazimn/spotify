@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
 import 'package:spotify/view/profile_drawer/p_drawer.dart';
+import 'package:spotify/view/songs_screen/songs_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,13 +13,184 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String selectedCategory = "";
+  String name = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
+
+  Future<void> getdata() async {
+    final pref = await SharedPreferences.getInstance();
+    name = await pref.getString("Name") ?? "Not available";
+    setState(() {});
+  }
+
+  String selectedCategory = "All";
   final GlobalKey<ScaffoldState> drawerkey = GlobalKey<ScaffoldState>();
+
+  final List<Map<String, dynamic>> recentPlaylists = [
+    {
+      'img': ImageConstants.likedsong,
+      'text': 'Liked Songs',
+      "subtext": "Your favorite tracks all in one place.",
+      "colors": ColorConstants.blue,
+    },
+    {
+      'img': ImageConstants.feelGood,
+      'text': 'Feel Good',
+      "subtext":
+          "Uplifting Malayalam and Tamil songs to boost your mood. Enjoy!!",
+      "colors": ColorConstants.yellow,
+    },
+    {
+      'img': ImageConstants.gymMotivation,
+      'text': 'GYM Motivation',
+      "subtext": "High-energy beats to power through your workouts.",
+      "colors": ColorConstants.darkgrey,
+    },
+    {
+      'img': ImageConstants.tamilSongs,
+      'text': 'Tamil Songs',
+      "subtext": "A collection of trending Tamil hits and classics.",
+      "colors": ColorConstants.orange,
+    },
+    {
+      'img': ImageConstants.malayalamSongs,
+      'text': 'Malayalam Songs',
+      "subtext": "Top Malayalam tracks for every mood and moment.",
+      "colors": ColorConstants.orange,
+    },
+    {
+      'img': ImageConstants.travelSongs,
+      'text': 'Travel Songs',
+      "subtext": "Perfect tunes to accompany your road trips and travels.",
+      "colors": ColorConstants.blue,
+    },
+    {
+      'img': ImageConstants.hindiSongs,
+      'text': 'Hindi Songs',
+      "subtext": "Bollywood chartbusters and soulful Hindi melodies.",
+      "colors": ColorConstants.p3,
+    },
+    {
+      'img': ImageConstants.topHitSongs,
+      'text': 'Top Hit Songs',
+      "subtext": "Today’s most popular tracks across all genres.",
+      "colors": ColorConstants.p1,
+    },
+  ];
+
+  final List<Map<String, dynamic>> topMixes = [
+    {
+      'img': ImageConstants.dabzeeTopMixes,
+      'text': 'Dabzee, Niraj Madhav\nAnd more',
+      'subtext': 'A blend of Malayalam rap and indie grooves you’ll love.',
+      'song': 'Mazha Mazha',
+      "colors": ColorConstants.darkgrey,
+    },
+    {
+      'img': ImageConstants.govindhTopMixes,
+      'text': 'Govind Vasantha,\nKailash Kher',
+      'subtext': 'Soothing fusion of classical and soulful Indian tunes.',
+      'song': 'Oru Manam',
+      "colors": ColorConstants.p2,
+    },
+    {
+      'img': ImageConstants.rajatTopMixes,
+      'text': 'Najim Arshad and\nOuseppachan',
+      'subtext': 'A mix of melodic hits and timeless soundtracks.',
+      'song': 'Manassin Madiyil',
+      "colors": ColorConstants.orange,
+    },
+    {
+      'img': ImageConstants.ravalTopMixes,
+      'text': 'Darshan Raval, A.R.\nRahman',
+      'subtext': 'Romantic Bollywood vibes with a touch of magic.',
+      'song': 'Chhod Diya',
+      "colors": ColorConstants.p2,
+    },
+  ];
+
+  final List<Map<String, dynamic>> albumFeatures = [
+    {
+      'img': ImageConstants.kalyanaRaman,
+      'text': 'Kalyana Raman',
+      'subtext': 'Berny-Ignatius',
+      "colors": ColorConstants.p1,
+    },
+    {
+      'img': ImageConstants.ambili,
+      'text': 'Ambili',
+      'subtext': 'Vishnu Vijay',
+      "colors": ColorConstants.blue,
+    },
+    {
+      'img': ImageConstants.tejaBhai,
+      'text': 'Teja Bhai & Family',
+      'subtext': 'Abu Murali',
+      "colors": ColorConstants.deeporange,
+    },
+    {
+      'img': ImageConstants.vishwaroopam,
+      'text': 'Vishwaroopam',
+      'subtext': 'Shankar-Ehsaan',
+      "colors": ColorConstants.darkgrey,
+    },
+  ];
+
+  final List<Map<String, dynamic>> recents = [
+    {
+      'img': ImageConstants.topHitSongs,
+      'text': 'Top Hit Songs',
+      'subtext': 'Playlist',
+      "colors": ColorConstants.p1,
+    },
+    {
+      'img': ImageConstants.feelGood,
+      'text': 'Feel Good',
+      'subtext': 'Playlist - Mithun',
+      "colors": ColorConstants.orange,
+    },
+    {
+      'img': ImageConstants.gymMotivation,
+      'text': 'Gym Motivation',
+      'subtext': 'Album',
+      "colors": ColorConstants.darkgrey,
+    },
+    {
+      'img': ImageConstants.tamilSongs,
+      'text': 'Tamil Hits',
+      'subtext': 'Album',
+      "colors": ColorConstants.orange,
+    },
+  ];
+
+  final List<Map<String, dynamic>> podcasts = [
+    {
+      'img': ImageConstants.feelGood,
+      'text': 'Feel good|\nEpisode 1',
+      'disc': 'English Unleashed: The\npodcasts oct 6 13 min',
+      'subtext': 'My Podcast Series',
+      "color": Colors.brown,
+    },
+    {
+      'img': ImageConstants.topHitSongs,
+      'text': 'The Music Stories',
+      'disc': 'English Unleashed: The\npodcasts oct 6 13 min',
+      'subtext': 'Check out my latest episodes',
+      "color": Colors.blueGrey,
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final double playlistBoxHeight = size.height * 0.07;
     final double playlistBoxWidth = size.width * 0.43;
+
     return Scaffold(
       key: drawerkey,
       drawer: ProfilrDrawer(drawerkey: drawerkey),
@@ -30,14 +203,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             children: [
               InkWell(
-                onTap: () {
-                  drawerkey.currentState?.openDrawer();
-                },
+                onTap: () => drawerkey.currentState?.openDrawer(),
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: ColorConstants.pink,
                   child: Text(
-                    "A",
+                    name.isNotEmpty ? name[0].toUpperCase() : "A",
                     style: TextStyle(
                       fontSize: 20,
                       color: ColorConstants.black,
@@ -51,270 +222,293 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(width: size.width * 0.03),
               _categoryChip("Music", 70),
               SizedBox(width: size.width * 0.03),
-              _categoryChip("Padcastss", 90),
+              _categoryChip("Podcasts", 90),
             ],
           ),
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.likedsong),
-                        text: 'Liked Songs',
-                        height: playlistBoxHeight,
-                        width: playlistBoxWidth,
-                      ),
-                      SizedBox(width: 10),
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.feelGood),
-                        text: 'Feel good',
-                        height: playlistBoxHeight,
-                        width: playlistBoxWidth,
-                      ),
-                    ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (selectedCategory == "All") ...[
+                const SizedBox(height: 10),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: recentPlaylists.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 2.8,
                   ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.gymMotivation),
-                        text: 'GYM \nMOtivation',
+                  itemBuilder: (context, index) {
+                    final recent = recentPlaylists[index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SongsScreen(
+                              text11: recent["text"],
+                              title: recent["text"],
+                              subtitle: recent["subtext"],
+                              image: recent["img"],
+                              clr: recent["colors"],
+                            ),
+                          ),
+                        );
+                      },
+                      child: recentPlaylist(
+                        img: AssetImage(recent['img']),
+                        text: recent['text'],
                         height: playlistBoxHeight,
                         width: playlistBoxWidth,
                       ),
-                      SizedBox(width: 10),
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.tamilSongs),
-                        text: 'Tamil Songs',
-                        height: playlistBoxHeight,
-                        width: playlistBoxWidth,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.malayalamSongs),
-                        text: 'Malayalam \nSongs',
-                        height: playlistBoxHeight,
-                        width: playlistBoxWidth,
-                      ),
-                      SizedBox(width: 10),
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.travelSongs),
-                        text: 'Travel Songs',
-                        height: playlistBoxHeight,
-                        width: playlistBoxWidth,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.hindiSongs),
-                        text: 'Hindi Songs',
-                        height: playlistBoxHeight,
-                        width: playlistBoxWidth,
-                      ),
-                      SizedBox(width: 10),
-                      recentPlaylist(
-                        img: AssetImage(ImageConstants.topHitSongs),
-                        text: 'Top Hit Songs',
-                        height: playlistBoxHeight,
-                        width: playlistBoxWidth,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Your top mixes",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Row(
-                  spacing: 20,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _topmixes(
-                      img: AssetImage(ImageConstants.dabzeeTopMixes),
-                      text: "Dabzee, NirajMadhav\nAnd more ",
-                    ),
-                    _topmixes(
-                      img: AssetImage(ImageConstants.govindhTopMixes),
-                      text: "Govind Vasantha,\nKaliash Kher",
-                    ),
-                    _topmixes(
-                      img: AssetImage(ImageConstants.rajatTopMixes),
-                      text: 'Najim Arshad and \nOuseppachan',
-                    ),
-
-                    _topmixes(
-                      img: AssetImage(ImageConstants.ravalTopMixes),
-                      text: "Darshan Raval,A.r.\nRahman",
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              ),
-            ),
-            SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Albums Featuring songs you like",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Row(
-                  spacing: 20,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _Albumfeatures(
-                      img: AssetImage(ImageConstants.kalyanaRaman),
-                      text: "kalyana Raman",
-                      subtext: 'Berny-Ignatius',
-                    ),
-                    _Albumfeatures(
-                      img: AssetImage(ImageConstants.ambili),
-                      text: "Ambili",
-                      subtext: 'Vishnu Vijay',
-                    ),
-                    _Albumfeatures(
-                      img: AssetImage(ImageConstants.tejaBhai),
-                      text: 'Teja Bhai and Family',
-                      subtext: 'Abu Murali',
-                    ),
+              ],
 
-                    _Albumfeatures(
-                      img: AssetImage(ImageConstants.vishwaroopam),
-                      text: "Vishwaroopam",
-                      subtext: 'Shanker-Ehsaan',
+              if (selectedCategory == "All" || selectedCategory == "Music") ...[
+                const SizedBox(height: 10),
+                _sectionTitle("Your Top Mixes"),
+                const SizedBox(height: 20),
+                _horizontalGrid(topMixes, (index) {
+                  final topmix = topMixes[index];
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SongsScreen(
+                            text11: topmix["song"],
+                            title: topmix["text"],
+                            subtitle: topmix["subtext"],
+                            image: topmix["img"],
+                            clr: topmix["colors"],
+                          ),
+                        ),
+                      );
+                    },
+                    child: _topmixes(
+                      img: AssetImage(topmix['img']),
+                      text: topmix['text'],
                     ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Recents",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w900,
+                  );
+                }),
+                const SizedBox(height: 20),
+                _sectionTitle("Albums Featuring Songs You Like"),
+                const SizedBox(height: 20),
+                _horizontalGrid(albumFeatures, (index) {
+                  final albumFeature = albumFeatures[index];
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SongsScreen(
+                            text11: albumFeature["text"],
+                            title: albumFeature["text"],
+                            subtitle: albumFeature["subtext"],
+                            image: albumFeature["img"],
+                            clr: albumFeature["colors"],
+                          ),
+                        ),
+                      );
+                    },
+                    child: _albumfeatures(
+                      img: AssetImage(albumFeature['img']),
+                      text: albumFeature['text'],
+                      subtext: albumFeature['subtext'],
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Row(
-                  spacing: 20,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _recent(
-                      img: AssetImage(ImageConstants.likedsong),
-                      text: "Liked Songs",
-                      subtext: 'Playlist',
+                  );
+                }),
+                const SizedBox(height: 20),
+                _sectionTitle("Based on your recent listening"),
+                const SizedBox(height: 20),
+                _horizontalGrid(recents, (index) {
+                  final recentlist = recents[index];
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SongsScreen(
+                            text11: recentlist["text"],
+                            title: recentlist["text"],
+                            subtitle: recentlist["subtext"],
+                            image: recentlist["img"],
+                            clr: recentlist["colors"],
+                          ),
+                        ),
+                      );
+                    },
+                    child: _recent(
+                      img: AssetImage(recentlist['img']),
+                      text: recentlist['text'],
+                      subtext: recentlist['subtext'],
                     ),
-                    _recent(
-                      img: AssetImage(ImageConstants.feelGood),
-                      text: "Feel good",
-                      subtext: 'Playlist - Mithun',
-                    ),
-                    _recent(
-                      img: AssetImage(ImageConstants.gymMotivation),
-                      text: 'Gym Motivation',
-                      subtext: 'Album',
-                    ),
+                  );
+                }),
+              ],
 
-                    _recent(
-                      img: AssetImage(ImageConstants.tamilSongs),
-                      text: "Tamil Hits",
-                      subtext: 'Album',
-                    ),
-                  ],
+              if (selectedCategory == "Podcasts") ...[
+                const SizedBox(height: 30),
+                _sectionTitle("Popular Podcasts"),
+                const SizedBox(height: 10),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: podcasts.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: podcasts[index]["color"],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+
+                                  image: DecorationImage(
+                                    image: AssetImage(podcasts[index]["img"]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      podcasts[index]["text"],
+                                      style: TextStyle(
+                                        color: ColorConstants.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      podcasts[index]["disc"],
+                                      style: TextStyle(
+                                        color: ColorConstants.white,
+
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+
+                          Text(
+                            podcasts[index]["subtext"],
+                            style: TextStyle(
+                              color: ColorConstants.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.add_circle_outline,
+                                color: ColorConstants.white,
+                                size: 25,
+                              ),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.play_circle_fill,
+                                color: ColorConstants.white,
+                                size: 25,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ),
-            ),
-          ],
+              ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Column _topmixes({required AssetImage img, required String text}) {
+  Widget _horizontalGrid(
+    List<Map<String, dynamic>> items,
+    Widget Function(int) builder,
+  ) {
+    return SizedBox(
+      height: 200,
+      child: GridView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          childAspectRatio: 1.3,
+        ),
+        itemBuilder: (context, index) => builder(index),
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 22,
+        fontWeight: FontWeight.w900,
+      ),
+    );
+  }
+
+  Widget _topmixes({required AssetImage img, required String text}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 150,
-          width: 150,
+          height: 130,
+          width: 130,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             image: DecorationImage(image: img, fit: BoxFit.cover),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 8),
         Text(text, style: TextStyle(color: ColorConstants.grey)),
       ],
     );
   }
 
-  Column _Albumfeatures({
+  Widget _albumfeatures({
     required AssetImage img,
     required String text,
     required String subtext,
@@ -323,14 +517,14 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 150,
-          width: 150,
+          height: 130,
+          width: 130,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             image: DecorationImage(image: img, fit: BoxFit.cover),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(text, style: TextStyle(color: ColorConstants.white, fontSize: 18)),
         Text(
           subtext,
@@ -340,7 +534,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Column _recent({
+  Widget _recent({
     required AssetImage img,
     required String text,
     required String subtext,
@@ -349,14 +543,14 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 100,
-          width: 100,
+          height: 130,
+          width: 130,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             image: DecorationImage(image: img, fit: BoxFit.cover),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(text, style: TextStyle(color: ColorConstants.white, fontSize: 18)),
         Text(
           subtext,
@@ -366,7 +560,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container recentPlaylist({
+  Widget recentPlaylist({
     required AssetImage img,
     required String text,
     required double height,
@@ -377,22 +571,21 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(5),
         color: const Color.fromARGB(255, 80, 77, 77),
       ),
-      width: width,
-      height: height,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(5),
-            child: Image(height: 70, width: 60, image: img, fit: BoxFit.cover),
+            borderRadius: BorderRadius.circular(5),
+            child: Image(height: 60, width: 60, image: img, fit: BoxFit.cover),
           ),
-          SizedBox(width: 10),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: ColorConstants.white,
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.white,
+              ),
             ),
           ),
         ],
@@ -403,11 +596,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _categoryChip(String label, double width) {
     bool isSelected = selectedCategory == label;
     return InkWell(
-      onTap: () {
-        setState(() {
-          selectedCategory = label;
-        });
-      },
+      onTap: () => setState(() => selectedCategory = label),
       child: Container(
         height: 35,
         width: width,

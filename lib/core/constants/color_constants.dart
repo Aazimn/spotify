@@ -15,4 +15,10 @@ class ColorConstants {
   static const Color darkblue = Color.fromARGB(255, 7, 49, 83);
   static const Color signUpTextfield = Color.fromARGB(255, 37, 37, 37);
   static const Color search = Color(0xff282828);
+  static const Color blue = Colors.blue;
+  static const Color red = Colors.red;
+  static const Color deeporange = Colors.deepOrange;
+  static const Color orange = Colors.orange;
+  static const Color darkgrey = Color.fromARGB(255, 87, 87, 87);
+  static const Color yellow = Colors.yellow;
 }

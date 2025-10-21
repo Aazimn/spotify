@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/a.dart';
 import 'package:spotify/view/blend_screen/blend_screen.dart';
-import 'package:spotify/view/mini_player_screen/mini_player.dart';
+import 'package:spotify/view/global_widgets/mini_player.dart';
 import 'package:spotify/view/profile_drawer/p_drawer.dart';
 import 'package:spotify/view/home_screen/home_screen.dart';
 import 'package:spotify/view/library_screen/library_screen.dart';
@@ -348,7 +349,7 @@ class _DashboardState extends State<Dashboard> {
             BottomNavigationBarItem(icon: Icon(Icons.add), label: "Create"),
           ],
         ),
-        body: Stack(children: [screens[num], const MiniPlayer()]),
+        body: Stack(children: [screens[num],  MiniPlayer()]),
       ),
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/dashbord/dashboard.dart';
 import 'package:spotify/view/home_screen/home_screen.dart';
+import 'package:spotify/view/otp_screen/otp_screen.dart';
 
 class PhoneLogin extends StatefulWidget {
   const PhoneLogin({super.key});
@@ -167,16 +169,19 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       ColorConstants.grey,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formkey.currentState!.validate()) {
+                      final number = phonectrl.text.trim();
+                      final pref = await SharedPreferences.getInstance();
+                      pref.setString("Phone", number);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Dashboard()),
+                        MaterialPageRoute(builder: (context) => OtpScreen()),
                       );
                     }
                   },
                   child: Text(
-                    "log in",
+                    "Next",
                     style: TextStyle(color: ColorConstants.black),
                   ),
                 ),

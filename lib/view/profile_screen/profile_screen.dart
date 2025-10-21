@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -9,6 +10,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String name = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
+
+  Future<void> getdata() async {
+    final pref = await SharedPreferences.getInstance();
+    name = await pref.getString("Name") ?? "Not available";
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +58,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: 25),
               Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 50,
                     backgroundColor: ColorConstants.p1,
                     child: Text(
-                      "A",
+                      name.isNotEmpty ? name[0].toUpperCase() : "A",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -58,9 +73,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(width: 15),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        "Aazim",
+                        name,
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

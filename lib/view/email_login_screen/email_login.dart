@@ -67,7 +67,7 @@ class _EmailLoginState extends State<EmailLogin> {
                   emailFocus.unfocus();
                 },
                 validator: (value) {
-                  if (value != null && value.contains("@")) {
+                  if (value != null && value.contains("@gmail.com")) {
                     return null;
                   } else {
                     return "Enter a valid email";
@@ -125,10 +125,10 @@ class _EmailLoginState extends State<EmailLogin> {
                   onPressed: () async {
                     if (_formkey.currentState!.validate()) {
                       final email = emailctrl.text.trim();
-                      final Password = passctrl.text.trim();
+                      final password = passctrl.text.trim();
                       final pref = await SharedPreferences.getInstance();
                       pref.setString("email", email);
-                      pref.setString("password", Password);
+                      pref.setString("password", password);
 
                       Navigator.push(
                       context,

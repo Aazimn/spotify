@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
+import 'package:spotify/view/name_create_screen/name_create.dart';
+import 'package:spotify/view/otp_screen/otp_screen.dart';
+import 'package:spotify/view/otp_sign_screen/otp_sign.dart';
 import 'package:spotify/view/password_signup_screen/password_signup.dart';
 
 class PhoneSignup extends StatefulWidget {
@@ -160,12 +164,19 @@ class _PhoneSignupState extends State<PhoneSignup> {
                       ColorConstants.grey,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formkey.currentState!.validate()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Password()),
-                      );
+                      if (_formkey.currentState!.validate()) {
+                        final number = phonectrl.text.trim();
+                        final pref = await SharedPreferences.getInstance();
+                        pref.setString("Phone_s_key", number);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OtpScreensign(),
+                          ),
+                        );
+                      }
                     }
                   },
                   child: Text(

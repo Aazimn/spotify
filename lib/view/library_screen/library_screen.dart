@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
 import 'package:spotify/view/search_section/search_section.dart';
+import 'package:spotify/view/songs_screen/songs_screen.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -11,51 +13,81 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
-  String selectedCategory = "All"; // default
+  String name = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
 
-  // All recents
-  final List<Map<String, String>> allRecents = [
+  Future<void> getdata() async {
+    final pref = await SharedPreferences.getInstance();
+    name = await pref.getString("Name") ?? "Not available";
+    setState(() {});
+  }
+
+  String selectedCategory = "All";
+
+  final List<Map<String, dynamic>> allRecents = [
     {
       'title': 'Liked Songs',
       'subtitle': 'Playlist',
       'img': ImageConstants.likedsong,
+      'disc': 'All your favorite songs saved in one place.',
+      'colors': ColorConstants.blue,
     },
     {
       'title': 'Feel Good',
       'subtitle': 'Playlist',
       'img': ImageConstants.feelGood,
+      'disc': 'Upbeat tracks to boost your mood anytime.',
+      'colors': ColorConstants.yellow,
     },
     {
       'title': 'Gym Motivation',
       'subtitle': 'Album',
       'img': ImageConstants.gymMotivation,
+      'disc': 'High-energy songs to keep your workout strong.',
+      'colors': ColorConstants.darkgrey,
     },
     {
       'title': 'Tamil Hits',
       'subtitle': 'Album',
       'img': ImageConstants.tamilSongs,
+      'disc': 'The best Tamil songs from top artists and movies.',
+      'colors': ColorConstants.orange,
     },
     {
       'title': 'Travel Songs',
       'subtitle': 'Playlist',
       'img': ImageConstants.travelSongs,
+      'disc': 'Perfect tunes to make your journeys unforgettable.',
+      'colors': ColorConstants.blue,
     },
     {
       'title': 'Raataan Lamiyan',
       'subtitle': 'Artist',
       'img': ImageConstants.raataan,
+      'disc': 'Melodious Punjabi hits from Raataan Lambiyan fame.',
+      'colors': ColorConstants.p1,
     },
     {
       'title': 'Chand Sifarish',
       'subtitle': 'Artist',
       'img': ImageConstants.chandsifarish,
+      'disc': 'Romantic Bollywood classics that never get old.',
+      'colors': ColorConstants.p2,
     },
     {
       'title': 'Perilla Rajyath',
       'subtitle': 'Artist',
       'img': ImageConstants.perillarajyath,
+      'disc': 'Popular Malayalam indie hits by Perilla Rajyath.',
+      'colors': ColorConstants.blue,
     },
   ];
+
   @override
   Widget build(BuildContext context) {
     final filteredRecents = selectedCategory == "All"
@@ -67,6 +99,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     selectedCategory.substring(0, selectedCategory.length - 1),
               )
               .toList();
+
     return Scaffold(
       backgroundColor: ColorConstants.black,
       appBar: AppBar(
@@ -78,7 +111,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: CircleAvatar(
                 backgroundColor: Colors.pink,
                 child: Text(
-                  "A",
+                  name.isNotEmpty ? name[0].toUpperCase() : "A",
                   style: TextStyle(
                     fontSize: 25,
                     color: ColorConstants.black,
@@ -87,7 +120,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 ),
               ),
             ),
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
             Text(
               "Your Library",
               style: TextStyle(
@@ -96,17 +129,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(width: 70),
+            const Spacer(),
             InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchSection()),
+                  MaterialPageRoute(
+                    builder: (context) => const SearchSection(),
+                  ),
                 );
               },
               child: Icon(Icons.search, color: ColorConstants.white, size: 30),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Icon(Icons.add, color: ColorConstants.white, size: 40),
           ],
         ),
@@ -116,6 +151,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // 🔹 Category filter chips
               Row(
                 spacing: 10,
                 children: [
@@ -124,27 +160,58 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   _categoryChip("Artists"),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+
+              // 🔹 "Recents" title
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     "Recents",
-                    style: TextStyle(color: ColorConstants.white, fontSize: 18),
+                    style: TextStyle(
+                      color: ColorConstants.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
 
-              SizedBox(height: 20),
-              for (var item in filteredRecents)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: _recents(
-                    title: item['title']!,
-                    subtitle: item['subtitle']!,
-                    img: item['img']!,
-                  ),
-                ),
+              // 🔹 ListView.builder for recents
+              ListView.builder(
+                shrinkWrap: true, // let it fit inside SingleChildScrollView
+                physics:
+                    const NeverScrollableScrollPhysics(), // no inner scroll
+                itemCount: filteredRecents.length,
+                itemBuilder: (context, index) {
+                  final item = filteredRecents[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SongsScreen(
+                              text11: item['title']!,
+                              title: item['title']!,
+                              subtitle: item['disc']!,
+                              image: item['img']!,
+                              clr: item['colors']!,
+                            ),
+                          ),
+                        );
+                      },
+                      child: _recents(
+                        title: item['title']!,
+                        subtitle: item['subtitle']!,
+                        img: item['img']!,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -152,6 +219,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
+  // 🔸 Category chip builder
   Widget _categoryChip(String label) {
     bool isSelected = selectedCategory == label;
     return InkWell(
@@ -181,6 +249,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
+  // 🔸 Recents row widget
   Row _recents({
     required String title,
     required String subtitle,

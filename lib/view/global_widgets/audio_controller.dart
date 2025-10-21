@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class AudioController extends ChangeNotifier {
   // --- Singleton setup ---
@@ -8,30 +8,40 @@ class AudioController extends ChangeNotifier {
   factory AudioController() => _instance;
 
   AudioController._internal() {
-    // Stream listeners (initialized once)
     _player.onDurationChanged.listen((d) {
       totalDuration = d;
       notifyListeners();
     });
 
     _player.onPositionChanged.listen((p) {
-      // Only update UI when the position (in seconds) changes
-      if (p.inSeconds != currentPosition.inSeconds) {
-        currentPosition = p;
-        notifyListeners();
-      }
+      currentPosition = p;
+      notifyListeners();
     });
 
     _player.onPlayerComplete.listen((_) => _handleSongCompletion());
+
+    // Audio context to ensure full volume on Android
+    _player.setAudioContext(AudioContext(
+      android: const AudioContextAndroid(
+        isSpeakerphoneOn: true,
+        contentType: AndroidContentType.music,
+        usageType: AndroidUsageType.media,
+        audioFocus: AndroidAudioFocus.gain,
+      ),
+      iOS:  AudioContextIOS(
+        category: AVAudioSessionCategory.playback,
+        options: <AVAudioSessionOptions>{},
+      ),
+    ));
   }
 
-  // --- Core player instance ---
-  final AudioPlayer _player = AudioPlayer();
+  // --- Core player ---
+  AudioPlayer _player = AudioPlayer();
 
-  // --- Playback state ---
   Map<String, dynamic>? currentSong;
   List<Map<String, dynamic>> _playlist = [];
   int _currentIndex = -1;
+
   bool isPlaying = false;
   bool isShuffling = false;
   bool isRepeating = false;
@@ -41,51 +51,39 @@ class AudioController extends ChangeNotifier {
 
   AudioPlayer get player => _player;
 
-  // --- Public API ---
+  /// Stream for UI slider
+  Stream<Duration> get positionStream => _player.onPositionChanged;
 
+  // --- Playlist controls ---
   void setPlaylist(List<Map<String, dynamic>> playlist) {
     _playlist = List<Map<String, dynamic>>.from(playlist);
-    if (_playlist.isEmpty) {
-      _resetState();
-    } else if (_currentIndex < 0 || _currentIndex >= _playlist.length) {
-      _currentIndex = 0;
-    }
+    if (_playlist.isEmpty) _resetState();
+    else if (_currentIndex < 0 || _currentIndex >= _playlist.length) _currentIndex = 0;
   }
 
   Future<void> playSong(Map<String, dynamic> song) async {
     final index = _playlist.indexWhere((s) => s['audio'] == song['audio']);
-    if (index != -1) {
-      _currentIndex = index;
-    } else if (_playlist.isEmpty) {
-      _playlist = [song];
-      _currentIndex = 0;
-    } else {
+    if (index != -1) _currentIndex = index;
+    else {
       _playlist.add(song);
       _currentIndex = _playlist.length - 1;
     }
-
     await _playAtCurrentIndex();
   }
 
   Future<void> togglePlayPause() async {
-    try {
-      if (isPlaying) {
-        await _player.pause();
-        isPlaying = false;
+    if (isPlaying) {
+      await _player.pause();
+      isPlaying = false;
+    } else {
+      if (currentSong == null && _currentIndex != -1 && _playlist.isNotEmpty) {
+        await _playAtCurrentIndex();
       } else {
-        if (currentSong == null &&
-            _currentIndex != -1 &&
-            _playlist.isNotEmpty) {
-          await _playAtCurrentIndex();
-        } else {
-          await _player.resume();
-          isPlaying = true;
-        }
+        await _player.resume();
+        isPlaying = true;
       }
-      notifyListeners();
-    } catch (e) {
-      debugPrint('togglePlayPause error: $e');
     }
+    notifyListeners();
   }
 
   Future<void> seekTo(Duration position) async {
@@ -94,35 +92,16 @@ class AudioController extends ChangeNotifier {
 
   Future<void> playNext() async {
     if (_playlist.isEmpty) return;
-
-    if (isShuffling) {
-      _currentIndex = Random().nextInt(_playlist.length);
-    } else {
-      _currentIndex = (_currentIndex + 1) % _playlist.length;
-    }
-
+    if (isShuffling) _currentIndex = Random().nextInt(_playlist.length);
+    else _currentIndex = (_currentIndex + 1) % _playlist.length;
     await _playAtCurrentIndex();
   }
 
   Future<void> playPrevious() async {
     if (_playlist.isEmpty) return;
-
-    if (isShuffling) {
-      _currentIndex = Random().nextInt(_playlist.length);
-    } else {
-      _currentIndex = _currentIndex > 0
-          ? _currentIndex - 1
-          : _playlist.length - 1;
-    }
-
+    if (isShuffling) _currentIndex = Random().nextInt(_playlist.length);
+    else _currentIndex = _currentIndex > 0 ? _currentIndex - 1 : _playlist.length - 1;
     await _playAtCurrentIndex();
-  }
-
-  Future<void> stop() async {
-    await _player.stop();
-    isPlaying = false;
-    currentPosition = Duration.zero;
-    notifyListeners();
   }
 
   void toggleShuffle() {
@@ -135,46 +114,45 @@ class AudioController extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get hasNext =>
-      _playlist.isNotEmpty && _currentIndex < _playlist.length - 1;
+  bool get hasNext => _playlist.isNotEmpty && _currentIndex < _playlist.length - 1;
   bool get hasPrevious => _playlist.isNotEmpty && _currentIndex > 0;
-
   Duration get remainingTime => totalDuration - currentPosition < Duration.zero
       ? Duration.zero
       : totalDuration - currentPosition;
 
-  // --- Internal Helpers ---
+  // --- Internal helpers ---
+  Future<void> _playAtCurrentIndex() async {
+    if (_currentIndex < 0 || _currentIndex >= _playlist.length) return;
 
-Future<void> _playAtCurrentIndex() async {
-  if (_currentIndex < 0 || _currentIndex >= _playlist.length) return;
+    final song = _playlist[_currentIndex];
+    try {
+      await _player.stop();
 
-  final song = _playlist[_currentIndex];
-  try {
-    await _player.stop();
-    await _player.release();
+      final audioPath = (song['audio'] ?? '').toString();
+      if (audioPath.isEmpty) return;
 
-    final audioPath = (song['audio'] ?? '').toString();
-    if (audioPath.isEmpty) return;
+      final assetPath = audioPath.replaceFirst('assets/', '');
 
-    final assetPath = audioPath.replaceFirst('assets/', '');
+      await _player.play(AssetSource(assetPath), volume: 1.0);
 
-    await _player.play(AssetSource(assetPath)); // 🎵 start first
-    await _player.setVolume(1.0); // 🔊 then force full volume (after session init)
+      currentSong = song;
+      isPlaying = true;
+      currentPosition = Duration.zero;
+      totalDuration = Duration.zero;
+      notifyListeners();
 
-    currentSong = song;
-    isPlaying = true;
-    currentPosition = Duration.zero;
-    totalDuration = Duration.zero;
-    notifyListeners();
-
-    debugPrint('✅ Volume forced to 1.0 after playback start');
-  } catch (e) {
-    debugPrint('Error in _playAtCurrentIndex: $e');
+      // wait until duration is loaded
+      Duration? duration;
+      for (int i = 0; i < 10; i++) {
+        duration = await _player.getDuration();
+        if (duration != null && duration > Duration.zero) break;
+        await Future.delayed(const Duration(milliseconds: 200));
+      }
+      if (duration != null) totalDuration = duration;
+    } catch (e) {
+      debugPrint('Error in _playAtCurrentIndex: $e');
+    }
   }
-}
-
-
-
 
   void _handleSongCompletion() {
     if (isRepeating) {
@@ -194,15 +172,13 @@ Future<void> _playAtCurrentIndex() async {
     notifyListeners();
   }
 
-  // --- Lifecycle ---
-
   void release() {
     _player.stop();
   }
 
   @override
   void dispose() {
-    // Don't auto-dispose since it's a singleton; call release() manually if needed
+    _player.dispose();
     super.dispose();
   }
 }

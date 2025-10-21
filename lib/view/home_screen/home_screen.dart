@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/dummy_data/home_screen_dummy.dart';
+import 'package:spotify/view/global_widgets/audio_controller.dart';
+import 'package:spotify/view/podcasts_screen/podcasts.dart';
 import 'package:spotify/view/profile_drawer/p_drawer.dart';
 import 'package:spotify/view/songs_screen/songs_screen.dart';
 
@@ -30,160 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String selectedCategory = "All";
   final GlobalKey<ScaffoldState> drawerkey = GlobalKey<ScaffoldState>();
-
-  final List<Map<String, dynamic>> recentPlaylists = [
-    {
-      'img': ImageConstants.likedsong,
-      'text': 'Liked Songs',
-      "subtext": "Your favorite tracks all in one place.",
-      "colors": ColorConstants.blue,
-    },
-    {
-      'img': ImageConstants.feelGood,
-      'text': 'Feel Good',
-      "subtext":
-          "Uplifting Malayalam and Tamil songs to boost your mood. Enjoy!!",
-      "colors": ColorConstants.yellow,
-    },
-    {
-      'img': ImageConstants.gymMotivation,
-      'text': 'GYM Motivation',
-      "subtext": "High-energy beats to power through your workouts.",
-      "colors": ColorConstants.darkgrey,
-    },
-    {
-      'img': ImageConstants.tamilSongs,
-      'text': 'Tamil Songs',
-      "subtext": "A collection of trending Tamil hits and classics.",
-      "colors": ColorConstants.orange,
-    },
-    {
-      'img': ImageConstants.malayalamSongs,
-      'text': 'Malayalam Songs',
-      "subtext": "Top Malayalam tracks for every mood and moment.",
-      "colors": ColorConstants.orange,
-    },
-    {
-      'img': ImageConstants.travelSongs,
-      'text': 'Travel Songs',
-      "subtext": "Perfect tunes to accompany your road trips and travels.",
-      "colors": ColorConstants.blue,
-    },
-    {
-      'img': ImageConstants.hindiSongs,
-      'text': 'Hindi Songs',
-      "subtext": "Bollywood chartbusters and soulful Hindi melodies.",
-      "colors": ColorConstants.p3,
-    },
-    {
-      'img': ImageConstants.topHitSongs,
-      'text': 'Top Hit Songs',
-      "subtext": "Today’s most popular tracks across all genres.",
-      "colors": ColorConstants.p1,
-    },
-  ];
-
-  final List<Map<String, dynamic>> topMixes = [
-    {
-      'img': ImageConstants.dabzeeTopMixes,
-      'text': 'Dabzee, Niraj Madhav\nAnd more',
-      'subtext': 'A blend of Malayalam rap and indie grooves you’ll love.',
-      'song': 'Mazha Mazha',
-      "colors": ColorConstants.darkgrey,
-    },
-    {
-      'img': ImageConstants.govindhTopMixes,
-      'text': 'Govind Vasantha,\nKailash Kher',
-      'subtext': 'Soothing fusion of classical and soulful Indian tunes.',
-      'song': 'Oru Manam',
-      "colors": ColorConstants.p2,
-    },
-    {
-      'img': ImageConstants.rajatTopMixes,
-      'text': 'Najim Arshad and\nOuseppachan',
-      'subtext': 'A mix of melodic hits and timeless soundtracks.',
-      'song': 'Manassin Madiyil',
-      "colors": ColorConstants.orange,
-    },
-    {
-      'img': ImageConstants.ravalTopMixes,
-      'text': 'Darshan Raval, A.R.\nRahman',
-      'subtext': 'Romantic Bollywood vibes with a touch of magic.',
-      'song': 'Chhod Diya',
-      "colors": ColorConstants.p2,
-    },
-  ];
-
-  final List<Map<String, dynamic>> albumFeatures = [
-    {
-      'img': ImageConstants.kalyanaRaman,
-      'text': 'Kalyana Raman',
-      'subtext': 'Berny-Ignatius',
-      "colors": ColorConstants.p1,
-    },
-    {
-      'img': ImageConstants.ambili,
-      'text': 'Ambili',
-      'subtext': 'Vishnu Vijay',
-      "colors": ColorConstants.blue,
-    },
-    {
-      'img': ImageConstants.tejaBhai,
-      'text': 'Teja Bhai & Family',
-      'subtext': 'Abu Murali',
-      "colors": ColorConstants.deeporange,
-    },
-    {
-      'img': ImageConstants.vishwaroopam,
-      'text': 'Vishwaroopam',
-      'subtext': 'Shankar-Ehsaan',
-      "colors": ColorConstants.darkgrey,
-    },
-  ];
-
-  final List<Map<String, dynamic>> recents = [
-    {
-      'img': ImageConstants.topHitSongs,
-      'text': 'Top Hit Songs',
-      'subtext': 'Playlist',
-      "colors": ColorConstants.p1,
-    },
-    {
-      'img': ImageConstants.feelGood,
-      'text': 'Feel Good',
-      'subtext': 'Playlist - Mithun',
-      "colors": ColorConstants.orange,
-    },
-    {
-      'img': ImageConstants.gymMotivation,
-      'text': 'Gym Motivation',
-      'subtext': 'Album',
-      "colors": ColorConstants.darkgrey,
-    },
-    {
-      'img': ImageConstants.tamilSongs,
-      'text': 'Tamil Hits',
-      'subtext': 'Album',
-      "colors": ColorConstants.orange,
-    },
-  ];
-
-  final List<Map<String, dynamic>> podcasts = [
-    {
-      'img': ImageConstants.feelGood,
-      'text': 'Feel good|\nEpisode 1',
-      'disc': 'English Unleashed: The\npodcasts oct 6 13 min',
-      'subtext': 'My Podcast Series',
-      "color": Colors.brown,
-    },
-    {
-      'img': ImageConstants.topHitSongs,
-      'text': 'The Music Stories',
-      'disc': 'English Unleashed: The\npodcasts oct 6 13 min',
-      'subtext': 'Check out my latest episodes',
-      "color": Colors.blueGrey,
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -370,85 +220,122 @@ class _HomeScreenState extends State<HomeScreen> {
                     childAspectRatio: 1.5,
                   ),
                   itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: podcasts[index]["color"],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 100,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-
-                                  image: DecorationImage(
-                                    image: AssetImage(podcasts[index]["img"]),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      podcasts[index]["text"],
-                                      style: TextStyle(
-                                        color: ColorConstants.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      podcasts[index]["disc"],
-                                      style: TextStyle(
-                                        color: ColorConstants.white,
-
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-
-                          Text(
-                            podcasts[index]["subtext"],
-                            style: TextStyle(
-                              color: ColorConstants.white,
-                              fontSize: 14,
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PodcastScreen(
+                              title: podcasts[index]["text"],
+                              img: podcasts[index]["img"],
                             ),
                           ),
-                          SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(
-                                Icons.add_circle_outline,
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: podcasts[index]["color"],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+
+                                    image: DecorationImage(
+                                      image: AssetImage(podcasts[index]["img"]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        podcasts[index]["text"],
+                                        style: TextStyle(
+                                          color: ColorConstants.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        podcasts[index]["disc"],
+                                        style: TextStyle(
+                                          color: ColorConstants.white,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+
+                            Text(
+                              podcasts[index]["subtext"],
+                              style: TextStyle(
                                 color: ColorConstants.white,
-                                size: 25,
+                                fontSize: 14,
                               ),
-                              SizedBox(width: 10),
-                              Icon(
-                                Icons.play_circle_fill,
-                                color: ColorConstants.white,
-                                size: 25,
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            SizedBox(height: 25),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      final currentValue =
+                                          podcasts[index]['isAdded'] ?? false;
+                                      podcasts[index]['isAdded'] =
+                                          !currentValue;
+                                    });
+                                  },
+                                  child: Icon(
+                                    podcasts[index]['isAdded']
+                                        ? Icons.check_circle
+                                        : Icons.add_circle_outline,
+                                    color: podcasts[index]['isAdded']
+                                        ? Colors.green
+                                        : Colors.white70,
+                                    size: 30,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                InkWell(
+                                  onTap: () {
+                                    final audioController =
+                                        Provider.of<AudioController>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    audioController.togglePlayPause();
+                                  },
+                                  child: Icon(
+                                    Icons.play_circle_fill,
+                                    color: ColorConstants.white,
+                                    size: 25,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

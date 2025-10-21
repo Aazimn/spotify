@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify/core/constants/color_constants.dart';
-import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/dummy_data/songs_screen_dummy.dart';
 import 'package:spotify/view/global_widgets/audio_controller.dart';
 import 'package:spotify/view/global_widgets/mini_player.dart';
 import 'package:spotify/view/search_section/search_section.dart';
+import 'package:spotify/view/song_payer_screen/song_player.dart';
 
-class SongsScreen extends StatelessWidget {
+class SongsScreen extends StatefulWidget {
   final String text11;
   final String title;
   final String subtitle;
@@ -22,48 +23,12 @@ class SongsScreen extends StatelessWidget {
     required this.clr,
   });
 
-  final List<Map<String, dynamic>> likedSongs = [
-    {
-      'img': ImageConstants.likedsong,
-      'text': 'Liked Songs',
-      'audio': 'assets/audios/audio1.mp3',
-    },
-    {
-      'img': ImageConstants.feelGood,
-      'text': 'Feel Good',
-      'audio': 'assets/audios/audio2.mp3',
-    },
-    {
-      'img': ImageConstants.gymMotivation,
-      'text': 'GYM Motivation',
-      'audio': 'assets/audios/audio3.mp3',
-    },
-    {
-      'img': ImageConstants.tamilSongs,
-      'text': 'Tamil Songs',
-      'audio': 'assets/audios/audio4.mp3',
-    },
-    {
-      'img': ImageConstants.malayalamSongs,
-      'text': 'Malayalam Songs',
-      'audio': 'assets/audios/audio1.mp3',
-    },
-    {
-      'img': ImageConstants.travelSongs,
-      'text': 'Travel Songs',
-      'audio': 'assets/audios/audio1.mp3',
-    },
-    {
-      'img': ImageConstants.hindiSongs,
-      'text': 'Hindi Songs',
-      'audio': 'assets/audios/audio1.mp3',
-    },
-    {
-      'img': ImageConstants.topHitSongs,
-      'text': 'Top Hit Songs',
-      'audio': 'assets/audios/audio1.mp3',
-    },
-  ];
+  @override
+  State<SongsScreen> createState() => _SongsScreenState();
+}
+
+class _SongsScreenState extends State<SongsScreen> {
+  bool isAdded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +37,7 @@ class SongsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorConstants.black,
       appBar: AppBar(
-        backgroundColor: clr,
+        backgroundColor: widget.clr,
         automaticallyImplyLeading: false,
         centerTitle: true,
         leading: IconButton(
@@ -84,7 +49,7 @@ class SongsScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          text11,
+          widget.text11,
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -97,7 +62,7 @@ class SongsScreen extends StatelessWidget {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [clr, Colors.black, Colors.black, Colors.black],
+                colors: [widget.clr, Colors.black, Colors.black, Colors.black],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -152,19 +117,22 @@ class SongsScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Image.asset(image, fit: BoxFit.cover),
+                      child: Image.asset(widget.image, fit: BoxFit.cover),
                     ),
                   ),
                   const SizedBox(height: 25),
                   Text(
-                    title,
+                    widget.title,
                     style: TextStyle(
                       color: ColorConstants.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(subtitle, style: TextStyle(color: ColorConstants.grey)),
+                  Text(
+                    widget.subtitle,
+                    style: TextStyle(color: ColorConstants.grey),
+                  ),
                   const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -182,12 +150,24 @@ class SongsScreen extends StatelessWidget {
                                 width: 4,
                               ),
                             ),
-                            child: Image.asset(image, fit: BoxFit.cover),
+                            child: Image.asset(widget.image, fit: BoxFit.cover),
                           ),
-                          Icon(
-                            Icons.add_circle_outline,
-                            size: 30,
-                            color: ColorConstants.grey,
+
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                isAdded = !isAdded;
+                              });
+                            },
+                            child: Icon(
+                              isAdded
+                                  ? Icons.check_circle
+                                  : Icons.add_circle_outline,
+                              size: 30,
+                              color: isAdded
+                                  ? ColorConstants.green
+                                  : ColorConstants.grey,
+                            ),
                           ),
                           Icon(
                             Icons.downloading,
@@ -216,49 +196,66 @@ class SongsScreen extends StatelessWidget {
                     itemCount: likedSongs.length,
                     itemBuilder: (context, index) {
                       final song = likedSongs[index];
-                      return ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image.asset(
-                            song["img"],
-                            height: 55,
-                            width: 55,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        title: Text(
-                          song["text"],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "Playlist • ${song["text"]}",
-                          style: TextStyle(
-                            color: ColorConstants.grey,
-                            fontSize: 14,
-                          ),
-                        ),
-                        trailing: InkWell(
-                          onTap: () {
-                            _showSongOptions(context, song);
-                          },
-                          child: Icon(
-                            Icons.more_horiz,
-                            color: ColorConstants.white,
-                          ),
-                        ),
-                        onTap: () {
+                      return InkWell(
+                        onDoubleTap: () {
                           final audioController = Provider.of<AudioController>(
                             context,
                             listen: false,
                           );
                           audioController.setPlaylist(likedSongs);
                           audioController.playSong(song);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SongPlayerScreen(),
+                            ),
+                          );
                         },
+                        child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image.asset(
+                              song["img"],
+                              height: 55,
+                              width: 55,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          title: Text(
+                            song["text"],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "Playlist • ${song["text"]}",
+                            style: TextStyle(
+                              color: ColorConstants.grey,
+                              fontSize: 14,
+                            ),
+                          ),
+                          trailing: InkWell(
+                            onTap: () {
+                              _showSongOptions(context, song);
+                            },
+                            child: Icon(
+                              Icons.more_horiz,
+                              color: ColorConstants.white,
+                            ),
+                          ),
+                          onTap: () {
+                            final audioController =
+                                Provider.of<AudioController>(
+                                  context,
+                                  listen: false,
+                                );
+                            audioController.setPlaylist(likedSongs);
+                            audioController.playSong(song);
+                          },
+                        ),
                       );
                     },
                   ),

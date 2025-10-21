@@ -10,6 +10,7 @@ import 'package:spotify/view/library_screen/library_screen.dart';
 import 'package:spotify/view/name_create_screen/name_create.dart';
 import 'package:spotify/view/otp_screen/otp_screen.dart';
 import 'package:spotify/view/phone_login_screen/phone_login.dart';
+import 'package:spotify/view/podcasts_screen/podcasts.dart';
 import 'package:spotify/view/search_screen/search_screen.dart';
 import 'package:spotify/view/settings_screen/settings.dart';
 import 'package:spotify/view/songs_screen/songs_screen.dart';
@@ -35,6 +36,6 @@ class Spotify extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Dashboard());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 }

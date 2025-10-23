@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/profile_drawer/p_drawer.dart';
 import 'package:spotify/view/search_section/search_section.dart';
 import 'package:spotify/view/songs_screen/songs_screen.dart';
 
@@ -28,6 +29,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   String selectedCategory = "All";
+  final GlobalKey<ScaffoldState> drawerkey = GlobalKey<ScaffoldState>();
 
   final List<Map<String, dynamic>> allRecents = [
     {
@@ -101,6 +103,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               .toList();
 
     return Scaffold(
+      key: drawerkey,
+      drawer: ProfilrDrawer(drawerkey: drawerkey),
       backgroundColor: ColorConstants.black,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -108,6 +112,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         title: Row(
           children: [
             InkWell(
+              onTap: drawerkey.currentState?.openDrawer,
               child: CircleAvatar(
                 backgroundColor: Colors.pink,
                 child: Text(
@@ -178,11 +183,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ),
               const SizedBox(height: 20),
 
-              
               ListView.builder(
-                shrinkWrap: true, 
-                physics:
-                    const NeverScrollableScrollPhysics(), 
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: filteredRecents.length,
                 itemBuilder: (context, index) {
                   final item = filteredRecents[index];
@@ -219,7 +222,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
-
   Widget _categoryChip(String label) {
     bool isSelected = selectedCategory == label;
     return InkWell(
@@ -248,7 +250,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
       ),
     );
   }
-
 
   Row _recents({
     required String title,

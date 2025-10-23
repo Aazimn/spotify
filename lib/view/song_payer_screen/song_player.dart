@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify/view/global_widgets/audio_controller.dart';
+import 'package:spotify/view/global_classes/audio_controller.dart';
 
 class SongPlayerScreen extends StatefulWidget {
   const SongPlayerScreen({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify/core/constants/color_constants.dart';
-import 'package:spotify/view/global_widgets/audio_controller.dart';
-import 'package:spotify/view/global_widgets/mini_player.dart';
+import 'package:spotify/view/global_classes/audio_controller.dart';
+import 'package:spotify/view/global_classes/mini_player.dart';
 import 'package:spotify/view/song_payer_screen/song_player.dart';
 
 class PodcastScreen extends StatelessWidget {

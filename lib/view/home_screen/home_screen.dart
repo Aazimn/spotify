@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/dummy_data/home_screen_dummy.dart';
-import 'package:spotify/view/global_widgets/audio_controller.dart';
+import 'package:spotify/view/global_classes/audio_controller.dart';
 import 'package:spotify/view/podcasts_screen/podcasts.dart';
 import 'package:spotify/view/profile_drawer/p_drawer.dart';
 import 'package:spotify/view/songs_screen/songs_screen.dart';

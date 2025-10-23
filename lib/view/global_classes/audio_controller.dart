@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class AudioController extends ChangeNotifier {
-  // --- Singleton setup ---
   static final AudioController _instance = AudioController._internal();
   factory AudioController() => _instance;
 
@@ -20,7 +19,6 @@ class AudioController extends ChangeNotifier {
 
     _player.onPlayerComplete.listen((_) => _handleSongCompletion());
 
-    // Audio context to ensure full volume on Android
     _player.setAudioContext(AudioContext(
       android: const AudioContextAndroid(
         isSpeakerphoneOn: true,
@@ -35,7 +33,6 @@ class AudioController extends ChangeNotifier {
     ));
   }
 
-  // --- Core player ---
   AudioPlayer _player = AudioPlayer();
 
   Map<String, dynamic>? currentSong;
@@ -51,10 +48,9 @@ class AudioController extends ChangeNotifier {
 
   AudioPlayer get player => _player;
 
-  /// Stream for UI slider
+
   Stream<Duration> get positionStream => _player.onPositionChanged;
 
-  // --- Playlist controls ---
   void setPlaylist(List<Map<String, dynamic>> playlist) {
     _playlist = List<Map<String, dynamic>>.from(playlist);
     if (_playlist.isEmpty) _resetState();
@@ -120,7 +116,6 @@ class AudioController extends ChangeNotifier {
       ? Duration.zero
       : totalDuration - currentPosition;
 
-  // --- Internal helpers ---
   Future<void> _playAtCurrentIndex() async {
     if (_currentIndex < 0 || _currentIndex >= _playlist.length) return;
 
@@ -141,7 +136,6 @@ class AudioController extends ChangeNotifier {
       totalDuration = Duration.zero;
       notifyListeners();
 
-      // wait until duration is loaded
       Duration? duration;
       for (int i = 0; i < 10; i++) {
         duration = await _player.getDuration();

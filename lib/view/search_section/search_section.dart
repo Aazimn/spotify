@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/global_classes/mini_player.dart';
+import 'package:spotify/view/songs_screen/songs_screen.dart';
 
 class SearchSection extends StatefulWidget {
   const SearchSection({super.key});
@@ -120,75 +122,100 @@ class _SearchSectionState extends State<SearchSection> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            copytitle.length == 0
-                ? Text(
-                    "No song found",
-                    style: TextStyle(color: ColorConstants.white),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Recent searches",
-                          style: TextStyle(
-                            fontSize: 25,
-                            color: ColorConstants.white,
-                            fontWeight: FontWeight.bold,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                copytitle.length == 0
+                    ? Text(
+                        "No song found",
+                        style: TextStyle(color: ColorConstants.white),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Recent searches",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: ColorConstants.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                SizedBox(height: 10),
+                ListView.builder(
+                  itemCount: copytitle.length,
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    final originalIndex = songTitle.indexOf(copytitle[index]);
+                    return ListTile(
+                      leading: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(images[originalIndex]),
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-            SizedBox(height: 10),
-            ListView.builder(
-              itemCount: copytitle.length,
-              shrinkWrap: true,
-              physics: AlwaysScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int index) {
-                final originalIndex = songTitle.indexOf(copytitle[index]);
-                return ListTile(
-                  leading: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(images[originalIndex]),
-                        fit: BoxFit.cover,
                       ),
-                    ),
-                  ),
-                  title: Text(
-                    copytitle[index],
-                    style: TextStyle(fontSize: 20, color: ColorConstants.white),
-                  ),
-                  subtitle: Text(
-                    subTitle[originalIndex],
-                    style: TextStyle(fontSize: 20, color: ColorConstants.white),
-                  ),
-                  trailing: InkWell(
-                    onTap: () {
-                      setState(() {
-                        final removedSong = copytitle[index];
-                        copytitle.removeAt(index);
-                        songTitle.remove(removedSong);
-                        subTitle.removeAt(index);
-                        images.removeAt(index);
-                      });
-                    },
-                    child: Icon(Icons.close),
-                  ),
-                );
-              },
+                      title: Text(
+                        copytitle[index],
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: ColorConstants.white,
+                        ),
+                      ),
+                      subtitle: Text(
+                        subTitle[originalIndex],
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: ColorConstants.white,
+                        ),
+                      ),
+                      trailing: InkWell(
+                        onTap: () {
+                          setState(() {
+                            final removedSong = copytitle[index];
+                            copytitle.removeAt(index);
+                            songTitle.remove(removedSong);
+                            subTitle.removeAt(index);
+                            images.removeAt(index);
+                          });
+                        },
+                        child: Icon(Icons.close),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SongsScreen(
+                              text11: copytitle[index],
+                              title: copytitle[index],
+                              subtitle: subTitle[originalIndex],
+                              image: images[originalIndex],
+                              clr: ColorConstants.p1,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          MiniPlayer(),
+        ],
       ),
     );
   }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/dummy_data/songs_screen_dummy.dart';
-import 'package:spotify/view/global_widgets/audio_controller.dart';
-import 'package:spotify/view/global_widgets/mini_player.dart';
+import 'package:spotify/view/global_classes/audio_controller.dart';
+import 'package:spotify/view/global_classes/mini_player.dart';
 import 'package:spotify/view/search_section/search_section.dart';
 import 'package:spotify/view/song_payer_screen/song_player.dart';
 
@@ -277,45 +277,141 @@ class _SongsScreenState extends State<SongsScreen> {
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             color: ColorConstants.signUpTextfield,
           ),
-          height: 500,
+          height: 540,
           width: double.infinity,
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset(
-                      song['img'],
-                      height: 55,
-                      width: 55,
-                      fit: BoxFit.cover,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.asset(
+                        song['img'],
+                        height: 55,
+                        width: 55,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text(
+                      song['text'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "Playlist • ${song['text']}",
+                      style: TextStyle(
+                        color: ColorConstants.grey,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                  title: Text(
-                    song['text'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+
+                  const Divider(color: Colors.grey, thickness: 0.4),
+                  const SizedBox(height: 10),
+
+                  _optionItem(Icons.share_outlined, "Share"),
+                  _optionItem(
+                    Icons.diamond_outlined,
+                    "Listen to music ad-free",
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.music_note,
+                          color: Colors.greenAccent,
+                          size: 16,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          "Premium",
+                          style: TextStyle(
+                            color: Colors.greenAccent,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  subtitle: Text(
-                    "Playlist • ${song['text']}",
-                    style: TextStyle(color: ColorConstants.grey, fontSize: 14),
+                  _optionItem(Icons.add_circle_outline, "Add to playlist"),
+                  _optionItem(
+                    Icons.cancel_outlined,
+                    "Exclude track from your taste profile",
                   ),
-                ),
-                // Add other options here
-              ],
+                  _optionItem(
+                    Icons.remove_circle_outline,
+                    "Remove from this playlist",
+                  ),
+                  _optionItem(Icons.wifi_tethering, "Go to radio"),
+                  _optionItem(Icons.album_outlined, "Go to album"),
+                  _optionItem(
+                    Icons.person_outline,
+                    "Go to artists",
+                    trailingArrow: true,
+                  ),
+                  _optionItem(
+                    Icons.confirmation_num_outlined,
+                    "Go to artists concerts",
+                    trailingArrow: true,
+                  ),
+                  _optionItem(Icons.music_note_outlined, "View song credits"),
+                  _optionItem(
+                    Icons.graphic_eq,
+                    "Show Spotify Code",
+                    trailingArrow: true,
+                  ),
+                ],
+              ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _optionItem(
+    IconData icon,
+    String title, {
+    Widget? trailing,
+    bool trailingArrow = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: Colors.white, size: 22),
+              const SizedBox(width: 16),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+          trailing ??
+              (trailingArrow
+                  ? const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: 14,
+                    )
+                  : const SizedBox()),
+        ],
+      ),
     );
   }
 }

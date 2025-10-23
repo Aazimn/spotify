@@ -1,7 +1,7 @@
 import 'package:spotify/core/constants/image_constants.dart';
 import 'package:spotify/model/song_models.dart';
 
-final List<SongModels> images = [
+final List<SongModels> songs = [
   SongModels(
     songTitle: "Rataan Lambiyan",
     subTitle: "song-Tanishk Bagchi",

@@ -14,6 +14,13 @@ class _EmailSignupState extends State<EmailSignup> {
   TextEditingController emailctrl = TextEditingController();
   final _formkey = GlobalKey<FormState>();
   FocusNode newFocusnode = FocusNode();
+
+  @override
+  void dispose() {
+    emailctrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

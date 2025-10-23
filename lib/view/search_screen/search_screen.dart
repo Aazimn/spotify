@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/profile_drawer/p_drawer.dart';
 import 'package:spotify/view/search_section/search_section.dart';
 import 'package:spotify/view/songs_screen/songs_screen.dart';
 
@@ -30,6 +31,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   final ImagePicker _imagePicker = ImagePicker();
+  final GlobalKey<ScaffoldState> drawerkey = GlobalKey<ScaffoldState>();
   File? pickedImage;
 
   Future<void> pick() async {
@@ -94,20 +96,27 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: drawerkey,
+      drawer: ProfilrDrawer(drawerkey: drawerkey),
       backgroundColor: ColorConstants.black,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: ColorConstants.black,
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.green,
-              child: Text(
-                name.isNotEmpty ? name[0].toUpperCase() : "A",
-                style: TextStyle(
-                  fontSize: 25,
-                  color: ColorConstants.black,
-                  fontWeight: FontWeight.bold,
+            InkWell(
+              onTap: () => drawerkey.currentState?.openDrawer(),
+              child: CircleAvatar(
+                backgroundColor: Colors.green,
+                child: Text(
+                  name.isNotEmpty
+                      ? name[0].toUpperCase()
+                      : "A",
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: ColorConstants.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

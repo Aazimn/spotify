@@ -18,6 +18,16 @@ class _EmailLoginState extends State<EmailLogin> {
   FocusNode emailFocus = FocusNode();
   FocusNode passFocus = FocusNode();
   bool _isobscure = true;
+
+@override
+  void dispose() {
+    passFocus.dispose();
+    passctrl.dispose();
+    emailFocus.dispose();
+    emailctrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

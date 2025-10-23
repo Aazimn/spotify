@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/blend_screen/blend_screen.dart';
-import 'package:spotify/view/global_widgets/mini_player.dart';
+import 'package:spotify/view/global_classes/mini_player.dart';
 import 'package:spotify/view/home_screen/home_screen.dart';
 import 'package:spotify/view/library_screen/library_screen.dart';
 import 'package:spotify/view/premium_screen/premium_screen.dart';

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
-import 'package:spotify/view/name_create_screen/name_create.dart';
-import 'package:spotify/view/otp_screen/otp_screen.dart';
 import 'package:spotify/view/otp_sign_screen/otp_sign.dart';
-import 'package:spotify/view/password_signup_screen/password_signup.dart';
 
 class PhoneSignup extends StatefulWidget {
   const PhoneSignup({super.key});
@@ -14,10 +11,27 @@ class PhoneSignup extends StatefulWidget {
 }
 
 class _PhoneSignupState extends State<PhoneSignup> {
-  TextEditingController phonectrl = TextEditingController();
+  final TextEditingController phonectrl = TextEditingController();
   final _formkey = GlobalKey<FormState>();
-  FocusNode newFocusnode = FocusNode();
+  final FocusNode newFocusnode = FocusNode();
+
   String? country;
+  String countryCode = ""; 
+
+  final Map<String, String> countryCodes = {
+    "India": "+91",
+    "USA": "+1",
+    "UK": "+44",
+    "Canada": "+1",
+  };
+
+  @override
+  void dispose() {
+    phonectrl.dispose();
+    newFocusnode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,105 +54,85 @@ class _PhoneSignupState extends State<PhoneSignup> {
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
                 ),
-                textAlign: TextAlign.start,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+
+         
               Container(
                 height: 60,
                 color: const Color.fromARGB(255, 67, 67, 67),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 0),
-                  child: DropdownButtonFormField(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    focusColor: Colors.red,
+                  padding: const EdgeInsets.only(left: 10),
+                  child: DropdownButtonFormField<String>(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
                     isExpanded: true,
-                    iconSize: 50,
-                    style: TextStyle(color: ColorConstants.black),
+                    dropdownColor: const Color.fromARGB(255, 67, 67, 67),
+                    iconSize: 40,
                     value: country,
-                    items: [
-                      DropdownMenuItem(value: "India", child: Text("India")),
-                      DropdownMenuItem(value: "Usa", child: Text("Usa")),
-                      DropdownMenuItem(value: "Uk", child: Text("Uk")),
-                      DropdownMenuItem(value: "Canada", child: Text("Canada")),
-                    ],
-                    selectedItemBuilder: (context) {
-                      return [
-                        Text(
-                          "India",
-                          style: TextStyle(color: ColorConstants.white),
-                        ),
-                        Text(
-                          "Usa",
-                          style: TextStyle(color: ColorConstants.white),
-                        ),
-                        Text(
-                          "Uk",
-                          style: TextStyle(color: ColorConstants.white),
-                        ),
-                        Text(
-                          "Canada",
-                          style: TextStyle(color: ColorConstants.white),
-                        ),
-                      ];
-                    },
+                    hint: const Text(
+                      "Select Country",
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                    items: countryCodes.keys
+                        .map((c) => DropdownMenuItem(
+                              value: c,
+                              child: Text(c),
+                            ))
+                        .toList(),
                     onChanged: (value) {
-                      country = value;
-                      setState(() {});
+                      setState(() {
+                        country = value;
+                        countryCode = countryCodes[value!]!;
+                      });
                     },
-                    validator: (value) {
-                      if (value != null) {
-                        return null;
-                      } else {
-                        return "Select a Country";
-                      }
-                    },
+                    style: const TextStyle(color: Colors.white),
+                    validator: (value) =>
+                        value == null ? "Select a Country" : null,
                   ),
                 ),
               ),
-              Row(
+
+              const SizedBox(height: 10),
+
+            Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      border: BoxBorder.all(
+                      border: Border.all(
                         color: const Color.fromARGB(255, 92, 90, 90),
                       ),
                       color: const Color.fromARGB(255, 67, 67, 67),
                     ),
                     height: 56,
-                    width: 50,
+                    width: 70,
                     child: Center(
                       child: Text(
-                        "+91",
+                        countryCode,
                         style: TextStyle(color: ColorConstants.white),
                       ),
                     ),
                   ),
-
-                  Container(
-                    width: 312,
+                  const SizedBox(width: 5),
+                  Expanded(
                     child: TextFormField(
                       controller: phonectrl,
                       focusNode: newFocusnode,
                       style: TextStyle(color: ColorConstants.white),
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
-                        errorStyle: TextStyle(height: 0),
-                        errorMaxLines: 1,
+                        errorStyle: const TextStyle(height: 0),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.zero,
                           borderSide: BorderSide.none,
                         ),
-                        border: OutlineInputBorder(),
                         filled: true,
                         fillColor: const Color.fromARGB(255, 67, 67, 67),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: ColorConstants.white),
                         ),
-                        hoverColor: ColorConstants.white,
                       ),
-                      onTapOutside: (event) {
-                        newFocusnode.unfocus();
-                      },
+                      onTapOutside: (event) => newFocusnode.unfocus(),
                       validator: (value) {
                         if (value != null &&
                             RegExp(r'^[0-9]{10}$').hasMatch(value)) {
@@ -151,32 +145,31 @@ class _PhoneSignupState extends State<PhoneSignup> {
                   ),
                 ],
               ),
-              SizedBox(height: 5),
+
+              const SizedBox(height: 5),
               Text(
-                "We may occusionally send you services_based messages",
-                style: TextStyle(color: ColorConstants.white),
+                "We may occasionally send you service-based messages",
+                style: TextStyle(color: ColorConstants.white, fontSize: 13),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
+
               Center(
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(
-                      ColorConstants.grey,
-                    ),
+                    backgroundColor:
+                        WidgetStatePropertyAll(ColorConstants.grey),
                   ),
                   onPressed: () async {
                     if (_formkey.currentState!.validate()) {
-                      if (_formkey.currentState!.validate()) {
-                        final number = phonectrl.text.trim();
-                        final pref = await SharedPreferences.getInstance();
-                        pref.setString("Phone_s_key", number);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OtpScreensign(),
-                          ),
-                        );
-                      }
+                      final number = "$countryCode${phonectrl.text.trim()}";
+                      final pref = await SharedPreferences.getInstance();
+                      pref.setString("Phone_s_key", number);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OtpScreensign(),
+                        ),
+                      );
                     }
                   },
                   child: Text(

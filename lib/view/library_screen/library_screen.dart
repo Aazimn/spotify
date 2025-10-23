@@ -178,11 +178,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ),
               const SizedBox(height: 20),
 
-              // 🔹 ListView.builder for recents
+              
               ListView.builder(
-                shrinkWrap: true, // let it fit inside SingleChildScrollView
+                shrinkWrap: true, 
                 physics:
-                    const NeverScrollableScrollPhysics(), // no inner scroll
+                    const NeverScrollableScrollPhysics(), 
                 itemCount: filteredRecents.length,
                 itemBuilder: (context, index) {
                   final item = filteredRecents[index];
@@ -219,7 +219,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
-  // 🔸 Category chip builder
+
   Widget _categoryChip(String label) {
     bool isSelected = selectedCategory == label;
     return InkWell(
@@ -249,7 +249,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
-  // 🔸 Recents row widget
+
   Row _recents({
     required String title,
     required String subtitle,

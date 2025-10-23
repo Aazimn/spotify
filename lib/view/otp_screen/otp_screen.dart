@@ -99,7 +99,7 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             const SizedBox(height: 30),
 
-            // OTP Input
+            
             Center(
               child: Pinput(
                 length: 6,

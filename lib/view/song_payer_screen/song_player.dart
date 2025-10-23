@@ -62,7 +62,7 @@ class _SongPlayerScreenState extends State<SongPlayerScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 40),
-                // Album art
+                
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ClipRRect(
@@ -76,7 +76,7 @@ class _SongPlayerScreenState extends State<SongPlayerScreen> {
                   ),
                 ),
                 const SizedBox(height: 40),
-                // Song info
+                
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
@@ -109,7 +109,7 @@ class _SongPlayerScreenState extends State<SongPlayerScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                // Slider
+               
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
@@ -149,7 +149,7 @@ class _SongPlayerScreenState extends State<SongPlayerScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Playback controls
+                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -200,7 +200,7 @@ class _SongPlayerScreenState extends State<SongPlayerScreen> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                // Bottom icons
+              
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,

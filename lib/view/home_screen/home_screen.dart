@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
-import 'package:spotify/core/constants/image_constants.dart';
 import 'package:spotify/view/dummy_data/home_screen_dummy.dart';
 import 'package:spotify/view/global_widgets/audio_controller.dart';
 import 'package:spotify/view/podcasts_screen/podcasts.dart';

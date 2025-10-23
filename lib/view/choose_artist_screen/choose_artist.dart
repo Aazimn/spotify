@@ -13,7 +13,7 @@ class ChooseArtist extends StatefulWidget {
 class _ChooseArtistState extends State<ChooseArtist> {
   final TextEditingController searchctrl = TextEditingController();
 
-  // single source of truth: name + image together
+  
   final List<Map<String, String>> artists = [
     {"name": "Billi Eilish", "image": "assets/images/billie.jpg"},
     {"name": "Ariana Grande", "image": "assets/images/ariana.jpg"},
@@ -31,6 +31,12 @@ class _ChooseArtistState extends State<ChooseArtist> {
   void initState() {
     super.initState();
     filtered = List.from(artists);
+  }
+
+  @override
+  void dispose() {
+    searchctrl.dispose();
+    super.dispose();
   }
 
   void search(String input) {

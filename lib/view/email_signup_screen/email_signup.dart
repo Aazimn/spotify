@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/name_create_screen/name_create.dart';
-import 'package:spotify/view/phone_signup_screen/phone_signup.dart';
 
 class EmailSignup extends StatefulWidget {
   const EmailSignup({super.key});

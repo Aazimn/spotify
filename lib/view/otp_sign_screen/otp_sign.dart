@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
-import 'package:spotify/view/dashbord/dashboard.dart';
 import 'package:spotify/view/name_create_screen/name_create.dart';
 
 class OtpScreensign extends StatefulWidget {
@@ -100,7 +99,6 @@ class _OtpScreenState extends State<OtpScreensign> {
             ),
             const SizedBox(height: 30),
 
-            // OTP Input
             Center(
               child: Pinput(
                 length: 6,

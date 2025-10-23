@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
 import 'package:spotify/view/dashbord/dashboard.dart';
-import 'package:spotify/view/sign_up_screen/sign_up.dart';
 import 'package:spotify/view/start_page/start_page.dart';
 
 class SplashScreen extends StatefulWidget {

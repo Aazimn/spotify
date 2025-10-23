@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/view/dashbord/dashboard.dart';
-import 'package:spotify/view/home_screen/home_screen.dart';
-import 'package:spotify/view/password_signup_screen/password_signup.dart';
+
 
 class EmailLogin extends StatefulWidget {
   const EmailLogin({super.key});

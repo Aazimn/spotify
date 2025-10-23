@@ -79,14 +79,14 @@ class PodcastScreen extends StatelessWidget {
         ),
       ),
 
-      // 👇 Main content + Mini Player layout
+     
       body: Stack(
         children: [
-          // Scrollable list content
+      
           ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             children: [
-              // Tabs
+            
               Row(
                 children: [
                   TextButton(
@@ -103,7 +103,7 @@ class PodcastScreen extends StatelessWidget {
               ),
               const Divider(color: Colors.white24),
 
-              // Filter Row
+        
               Row(
                 children: const [
                   Icon(Icons.filter_list, color: Colors.white70, size: 18),
@@ -116,7 +116,7 @@ class PodcastScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Episodes List
+            
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -158,12 +158,12 @@ class PodcastScreen extends StatelessWidget {
                 },
               ),
 
-              // Add spacing for the mini player
+       
               const SizedBox(height: 80),
             ],
           ),
 
-          // ✅ Mini player as *direct* child of Stack
+       
           MiniPlayer(),
         ],
       ),
@@ -196,14 +196,14 @@ class EpisodeCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Thumbnail
+         
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.asset(img, width: 64, height: 64, fit: BoxFit.cover),
           ),
           const SizedBox(width: 12),
 
-          // Episode Info
+        
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,7 +232,7 @@ class EpisodeCard extends StatelessWidget {
             ),
           ),
 
-          // Play Button
+       
           Padding(
             padding: const EdgeInsets.only(left: 8.0, top: 8),
             child: IconButton(

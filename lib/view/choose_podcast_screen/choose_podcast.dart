@@ -3,7 +3,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
 import 'package:spotify/view/dashbord/dashboard.dart';
-import 'package:spotify/view/home_screen/home_screen.dart';
 
 class ChoosePodcast extends StatefulWidget {
   const ChoosePodcast({super.key});
@@ -15,7 +14,7 @@ class ChoosePodcast extends StatefulWidget {
 class _ChoosePodcastState extends State<ChoosePodcast> {
   final TextEditingController searchctrl = TextEditingController();
 
-  // single source of truth: name + image together
+  
   final List<Map<String, String>> artists = [
     {"name": "Distractible", "image": ImageConstants.distractible},
     {"name": "Gee Thanks", "image": ImageConstants.gee},
@@ -33,6 +32,12 @@ class _ChoosePodcastState extends State<ChoosePodcast> {
   void initState() {
     super.initState();
     filtered = List.from(artists);
+  }
+
+  @override
+  void dispose() {
+    searchctrl.dispose();
+    super.dispose();
   }
 
   void search(String input) {

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/core/constants/color_constants.dart';
+import 'package:spotify/core/constants/image_constants.dart';
 import 'package:spotify/view/search_section/search_section.dart';
+import 'package:spotify/view/songs_screen/songs_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,7 +15,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-    String name = "";
+  String name = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -26,19 +28,19 @@ class _SearchScreenState extends State<SearchScreen> {
     name = await pref.getString("Name") ?? "Not available";
     setState(() {});
   }
+
   final ImagePicker _imagePicker = ImagePicker();
-  File? _pickedImage;
+  File? pickedImage;
 
   Future<void> pick() async {
     final data = await _imagePicker.pickImage(source: ImageSource.camera);
     if (data != null) {
       setState(() {
-        _pickedImage = File(data.path);
+        pickedImage = File(data.path);
       });
     }
   }
 
- 
   final List<Map<String, dynamic>> startBrowsingItems = [
     {"title": "Music", "color": ColorConstants.pink},
     {"title": "Podcasts", "color": ColorConstants.darkgreen},
@@ -50,17 +52,43 @@ class _SearchScreenState extends State<SearchScreen> {
     {
       "title": "Podcasts Charts",
       "color": const Color.fromARGB(255, 98, 71, 51),
+      "img": ImageConstants.drake,
     },
     {
       "title": "Business &\nTechnology",
       "color": const Color.fromARGB(255, 103, 23, 62),
+      "img": ImageConstants.ariana,
     },
-    {"title": "Discover", "color": const Color.fromARGB(255, 36, 88, 46)},
-    {"title": "Radio", "color": const Color.fromARGB(255, 6, 39, 53)},
-    {"title": "Malayalam", "color": const Color.fromARGB(255, 111, 103, 198)},
-    {"title": "Hindi", "color": const Color.fromARGB(255, 162, 162, 48)},
-    {"title": "Punjabi", "color": const Color.fromARGB(255, 143, 81, 32)},
-    {"title": "Tamil", "color": const Color.fromARGB(255, 96, 59, 156)},
+    {
+      "title": "Discover",
+      "color": const Color.fromARGB(255, 36, 88, 46),
+      "img": ImageConstants.bts,
+    },
+    {
+      "title": "Radio",
+      "color": const Color.fromARGB(255, 6, 39, 53),
+      "img": ImageConstants.billie,
+    },
+    {
+      "title": "Malayalam",
+      "color": const Color.fromARGB(255, 111, 103, 198),
+      "img": ImageConstants.distractible,
+    },
+    {
+      "title": "Hindi",
+      "color": const Color.fromARGB(255, 162, 162, 48),
+      "img": ImageConstants.chandsifarish,
+    },
+    {
+      "title": "Punjabi",
+      "color": const Color.fromARGB(255, 143, 81, 32),
+      "img": ImageConstants.drake,
+    },
+    {
+      "title": "Tamil",
+      "color": const Color.fromARGB(255, 96, 59, 156),
+      "img": ImageConstants.ed,
+    },
   ];
 
   @override
@@ -162,17 +190,32 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 15,
                   crossAxisSpacing: 15,
-                  childAspectRatio: 2, 
+                  childAspectRatio: 2,
                 ),
                 itemBuilder: (context, index) {
                   final item = startBrowsingItems[index];
-                  return _buildBrowsingCard(item["title"], item["color"]);
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SongsScreen(
+                            text11: startBrowsingItems[index]["title"],
+                            title: startBrowsingItems[index]["title"],
+                            subtitle: startBrowsingItems[index]["title"],
+                            image: browsingAllItems[index]["img"],
+                            clr: startBrowsingItems[index]["color"],
+                          ),
+                        ),
+                      );
+                    },
+                    child: _buildBrowsingCard(item["title"], item["color"]),
+                  );
                 },
               ),
 
               const SizedBox(height: 30),
 
-              
               Text(
                 "Browsing all",
                 style: TextStyle(
@@ -190,11 +233,27 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 15,
                   crossAxisSpacing: 15,
-                  childAspectRatio: 1.4, 
+                  childAspectRatio: 1.4,
                 ),
                 itemBuilder: (context, index) {
                   final item = browsingAllItems[index];
-                  return _buildBrowsingCard(item["title"], item["color"]);
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SongsScreen(
+                            text11: browsingAllItems[index]["title"],
+                            title: browsingAllItems[index]["title"],
+                            subtitle: browsingAllItems[index]["title"],
+                            image: browsingAllItems[index]["img"],
+                            clr: browsingAllItems[index]["color"],
+                          ),
+                        ),
+                      );
+                    },
+                    child: _buildBrowsingCard(item["title"], item["color"]),
+                  );
                 },
               ),
             ],
@@ -204,7 +263,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
- 
   Widget _buildBrowsingCard(String title, Color bgColor) {
     return Container(
       decoration: BoxDecoration(

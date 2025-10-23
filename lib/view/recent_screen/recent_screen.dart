@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spotify/core/constants/color_constants.dart';
 import 'package:spotify/core/constants/image_constants.dart';
+import 'package:spotify/view/song_payer_screen/song_player.dart';
 
 class RecentScreen extends StatefulWidget {
   const RecentScreen({super.key});
@@ -68,11 +69,19 @@ class _RecentScreenState extends State<RecentScreen> {
               ],
             ),
             SizedBox(height: 20),
-            _recents(
-              title: "Liked Songs",
-              subtitle: "8 songs played",
-              img: ImageConstants.likedsong,
-              size: 95,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SongPlayerScreen()),
+                );
+              },
+              child: _recents(
+                title: "Liked Songs",
+                subtitle: "8 songs played",
+                img: ImageConstants.likedsong,
+                size: 95,
+              ),
             ),
             SizedBox(height: 20),
             Row(

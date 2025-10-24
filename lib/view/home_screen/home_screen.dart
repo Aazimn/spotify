@@ -275,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         podcasts[index]["disc"],
                                         style: TextStyle(
                                           color: ColorConstants.white,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                         ),
                                       ),
                                     ],

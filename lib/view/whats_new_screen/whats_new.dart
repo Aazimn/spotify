@@ -169,12 +169,12 @@ class _WhatsNewState extends State<WhatsNew> {
               ),
               Text(
                 artist,
-                style: TextStyle(color: ColorConstants.grey, fontSize: 14),
+                style: TextStyle(color: ColorConstants.grey, fontSize: 13),
               ),
               SizedBox(height: 35),
               Row(
                 children: [
-                  SizedBox(width: 190),
+                  SizedBox(width: 170),
                   Icon(
                     Icons.play_circle,
                     color: ColorConstants.white,

@@ -275,7 +275,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     text2: 'Individual',
                     text3:
                         ' · 1 Premium account\n · Cancel anytime\n · Subscribe or one_time payment',
-                    height: 300,
+                    height: 330,
                   ),
                   SizedBox(height: 20),
                   _premium(
@@ -285,7 +285,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     text2: 'Student',
                     text3:
                         ' · 1 verified Premium account\n · Discount for eligible students\n · Cancel anytime\n · Subscribe or one_time payment',
-                    height: 330,
+                    height: 360,
                   ),
                   SizedBox(height: 20),
                   _premium(
@@ -295,7 +295,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     text2: 'Duo',
                     text3:
                         ' · 2 Premium account\n · Cancel anytime\n · Subscribe or one-time payment',
-                    height: 300,
+                    height: 330,
                   ),
                   SizedBox(height: 20),
                   _premium(
@@ -305,7 +305,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     text2: 'Family',
                     text3:
                         ' · Upto 6 Premium account\n · Control content marked as explicit\n · Cancel anytime\n · Subscribe or one_time payment',
-                    height: 330,
+                    height: 380,
                   ),
                 ],
               ),
@@ -394,7 +394,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 SizedBox(height: 20),
                 Text(
                   text3,
-                  style: TextStyle(color: ColorConstants.white, fontSize: 20),
+                  style: TextStyle(color: ColorConstants.white, fontSize: 18),
                 ),
                 SizedBox(height: 15),
                 Text(
